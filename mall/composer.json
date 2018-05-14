@@ -1,11 +1,9 @@
 {
-    "name": "laravel/laravel",
-    "description": "The Laravel Framework.",
-    "keywords": ["framework", "laravel"],
-    "license": "MIT",
+    "name": "bedrock/mall",
+    "description": "Bedrock Poverty Alleviation Mall.",
     "type": "project",
     "require": {
-        "php": ">=7.0.0",
+        "php": ">=7.1.0",
         "fideloper/proxy": "~3.3",
         "laravel/framework": "5.5.*",
         "laravel/tinker": "~1.0"
@@ -23,7 +21,7 @@
             "database/factories"
         ],
         "psr-4": {
-            "App\\": "app/"
+            "Bedrock\\": "app/"
         }
     },
     "autoload-dev": {
