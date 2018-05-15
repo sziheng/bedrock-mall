@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Providers;
+namespace Bedrock\Providers;
 
 use Illuminate\Support\ServiceProvider;
 
