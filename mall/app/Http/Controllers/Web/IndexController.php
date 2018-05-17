@@ -25,7 +25,18 @@ class IndexController extends BaseController
      */
     public function getIndex()
     {
-        //todo
+        //todo 1.- 平台关注人数
+
+        //- 帮扶对象（户/人）
+        //- 彩虹公告
+        //- 公司购买排行
+        //- 扶贫总计以及按照地区排行
+        //- 扶贫商品比例按照地区划分
+        //- 平台销售额，按照时间划分
+        //- 扶贫商品比例，按照地区划分
+        //- 建档立卡户显示
+
+
     }
 
 }
