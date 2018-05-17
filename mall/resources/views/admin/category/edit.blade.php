@@ -19,7 +19,7 @@
                         </div>
                         <div class="x_content">
 
-                            <form class="form-horizontal form-label-left" novalidate action="/admin/category/{{$category->id}}"  method="POST" enctype="multipart/form-data">
+                            <form class="form-horizontal form-label-left" novalidate action="/category/{{$category->id}}"  method="POST" enctype="multipart/form-data">
                                 {{ csrf_field() }}
                                 @if($category->id)
                                     <input type="hidden" name="_method" value="PUT">

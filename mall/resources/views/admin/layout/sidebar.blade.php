@@ -64,7 +64,7 @@
                     <li><a><i class="fa fa-bar-chart-o"></i> 商品管理 <span class="fa fa-chevron-down"></span></a>
                         <ul class="nav child_menu">
                             <li><a href="chartjs.html">商品列表</a></li>
-                            <li><a href="/admin/category">商品分类</a></li>
+                            <li><a href="/category">商品分类</a></li>
                         </ul>
                     </li>
                     <li><a><i class="fa fa-clone"></i>Layouts <span class="fa fa-chevron-down"></span></a>
