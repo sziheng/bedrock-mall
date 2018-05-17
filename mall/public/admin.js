@@ -13,7 +13,7 @@ $(function(){
         } else {
             ishome = 0
         }
-        $.post("/admin/category/"+id+"/ishome",{ishome:ishome},function(result){
+        $.post("/category/"+id+"/ishome",{ishome:ishome},function(result){
             if (result.error){
                 alert(result.msg)
             }else{

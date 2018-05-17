@@ -1,18 +1,15 @@
 <?php
 
-namespace App\Admin\Controllers;
+namespace Bedrock\Http\Controllers\Web;
 
 use Bedrock\Models\Category;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-
-
 /**
  * Class GoodController
  * @package App\Admin\Controllers
  */
 
-class CategoryController extends Controller
+class CategoryController extends BaseController
 {
     /**
      * Create by szh
@@ -58,7 +55,7 @@ class CategoryController extends Controller
             $params['thumb'] = '/storage/'. $path;
         }
         $post = Category::create($params);
-        return redirect('/admin/category');
+        return redirect('/category');
     }
 
     /**
@@ -69,7 +66,7 @@ class CategoryController extends Controller
     public function delete(Category $category)
     {
         $category->delete();
-        return redirect('/admin/category');
+        return redirect('/category');
     }
 
     /**
@@ -109,7 +106,7 @@ class CategoryController extends Controller
         }
         $category->save();
         //渲染
-        return redirect("/admin/category");
+        return redirect("/category");
     }
 
     /**

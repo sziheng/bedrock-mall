@@ -15,4 +15,24 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-include_once('admin.php');
+//商品分类模块
+Route::get('/category', '\Bedrock\Http\Controllers\Web\CategoryController@index');
+
+//分类添加页面
+Route::get('/category/create', '\Bedrock\Http\Controllers\Web\CategoryController@create');
+
+//分类添加操作
+Route::post('/category', '\Bedrock\Http\Controllers\Web\CategoryController@store');
+
+//删除分类
+Route::get('/category/{category}/delete', '\Bedrock\Http\Controllers\Web\CategoryController@delete');
+
+//编辑分类
+Route::get('/category/{category}/edit', '\Bedrock\Http\Controllers\Web\CategoryController@edit');
+
+//编辑分类操作
+Route::put('/category/{category}', '\Bedrock\Http\Controllers\Web\CategoryController@update');
+
+//分类显示/隐藏
+Route::post('/category/{category}/ishome', '\Bedrock\Http\Controllers\Web\CategoryController@ishome');
+

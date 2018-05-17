@@ -10,7 +10,7 @@
                             <h2>商品管理 <small>商品分类</small></h2>
                             <div class="clearfix"></div>
                         </div>
-                        <a href="/admin/category/create" class="btn btn-primary" type="button" style="float:right">添加分类</a>
+                        <a href="/category/create" class="btn btn-primary" type="button" style="float:right">添加分类</a>
                         <div class="x_content">
 
                             <div class="table-responsive">
@@ -22,9 +22,6 @@
                                         <th class="column-title">名称 </th>
                                         <th class="column-title no-link last"><span class="nobr">操作</span>
                                         </th>
-                                        <th class="bulk-actions" colspan="7">
-                                            <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
-                                        </th>
                                     </tr>
                                     </thead>
 
@@ -35,8 +32,8 @@
                                             <td class=" ">{{$category->name}}</td>
                                             <td class=" last">
                                                 <button data-id="{{$category->id}}" type="button" class="btn ishome @if($category->ishome)btn-info @else btn-default @endif btn-xs" @if($category->ishome) data-ishome="0" @else data-ishome="1" @endif>@if($category->ishome)显示@else隐藏@endif</button>
-                                                <a href="/admin/category/{{$category->id}}/edit"><i class="glyphicon glyphicon-edit"></i></a>
-                                                <a href="/admin/category/{{$category->id}}/delete"><i class="glyphicon glyphicon-trash"></i></a>
+                                                <a href="/category/{{$category->id}}/edit"><i class="glyphicon glyphicon-edit"></i></a>
+                                                <a href="/category/{{$category->id}}/delete"><i class="glyphicon glyphicon-trash"></i></a>
                                             </td>
                                         </tr>
                                     @endforeach
