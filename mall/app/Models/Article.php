@@ -3,11 +3,11 @@
 namespace Bedrock\Models;
 
 /**
- * Class User
+ * Class Article
  *
  * @package \Bedrock\Models
  */
-class User extends BaseModel
+class Article extends BaseModel
 {
 
 }
