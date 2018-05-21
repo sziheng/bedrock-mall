@@ -4,6 +4,7 @@ namespace Bedrock\Http\Controllers\Web;
 
 use Bedrock\Models\Category;
 use Illuminate\Http\Request;
+
 /**
  * Class GoodController
  * @package App\Admin\Controllers
@@ -62,10 +63,12 @@ class CategoryController extends BaseController
      * Create by szh
      * @param Category $category
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @throws \Exception
      */
     public function delete(Category $category)
     {
         $category->delete();
+
         return redirect('/category');
     }
 
@@ -112,22 +115,14 @@ class CategoryController extends BaseController
     /**
      * Create by szh
      * @param Category $category
-     * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @param Request  $request
+     * @return array
      */
     public function ishome(Category $category, Request $request)
     {
         $category->ishome = request('ishome');
-        $result = $category->save();
-        if ($result){
-            return [
-                'error' => 0
-            ];
-        } else{
-            return [
-                'error' => 1,
-                'msg'   => '失败',
-            ];
-        }
+        $result           = $category->save();
+
+        return $result ? ['error' => 0] : ['error' => 1, 'msg' => '失败',];
     }
 }
