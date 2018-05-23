@@ -9,5 +9,6 @@ namespace Bedrock\Models;
  */
 class User extends BaseModel
 {
+    protected $table = 'ims_weshop_members';
 
 }
