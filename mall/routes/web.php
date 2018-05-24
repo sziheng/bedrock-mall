@@ -36,3 +36,6 @@ Route::put('/category/{category}', '\Bedrock\Http\Controllers\Web\CategoryContro
 //分类显示/隐藏
 Route::post('/category/{category}/ishome', '\Bedrock\Http\Controllers\Web\CategoryController@ishome');
 
+
+//订单概述页面
+Route::get('/order', '\Bedrock\Http\Controllers\Web\OrderController@index');
