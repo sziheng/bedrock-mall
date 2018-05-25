@@ -103,7 +103,7 @@ class GoodController extends Controller
                 $sql = $sql
                     ->where(function($query) use($condition)
                     {
-                        $query->where('goods.deleted','=',"0");
+                        $query->where('goods.deleted','=',"1");
                     });
                 break;
             default:
@@ -207,6 +207,25 @@ class GoodController extends Controller
                 $id = $request->id;
             }
             $result = Good::whereIn('id', $id)->update(array('deleted'=>$request->params));
+            return $result ? ['error' => 0] : ['error' => 1, 'msg' => '失败',];
+        } else {
+            return ['error' => 1, 'msg' => 'id不存在',];
+        }
+    }
+
+    /**
+     * Create by szh
+     * 商品彻底删除
+     */
+    public function physicsDelete(Request $request)
+    {
+        if ($request->id){
+            if (!is_array($request->id)) {
+                $id = array($request->id);
+            } else {
+                $id = $request->id;
+            }
+            $result = Good::whereIn('id', $id)->delete();
             return $result ? ['error' => 0] : ['error' => 1, 'msg' => '失败',];
         } else {
             return ['error' => 1, 'msg' => 'id不存在',];
