@@ -25,6 +25,12 @@
     <link href="/build/css/custom.min.css" rel="stylesheet">
     <!-- Bootstrap-fileinput -->
     <link href="/bootstrap-fileinput/css/fileinput.min.css" rel="stylesheet">
+    <sctipt src="{{ URL::asset('/') }}vendors/jquery/dist/jquery.min.js"></sctipt>
+    <script src="/vendors/jquery/dist/jquery.min.js"></script>
+    <script src="/upload/upload.js"></script>
+    <script src="/admin.js"></script>
+    <script src="/layer/layer.js"></script>
+
 </head>
 
 <body class="nav-md">
@@ -42,13 +48,11 @@
 </div>
 @include('admin.layout.footer')
 <!-- jQuery -->
-<script src="/vendors/jquery/dist/jquery.min.js"></script>
-<script src="/upload/upload.js"></script>
-<script src="/admin.js"></script>
 
+</body>
+</html>
 <!-- Bootstrap -->
 <script src="/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
-
 <!-- FastClick -->
 <script src="/vendors/fastclick/lib/fastclick.js"></script>
 <!-- NProgress -->
@@ -78,12 +82,5 @@
 <!-- bootstrap-daterangepicker -->
 <script src="/vendors/moment/min/moment.min.js"></script>
 <script src="/vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
-
-
-
 <!-- Custom Theme Scripts -->
 <script src="/build/js/custom.min.js"></script>
-
-
-</body>
-</html>

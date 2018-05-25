@@ -54,6 +54,7 @@ class CategoryController extends BaseController
         if ($request->file('thumb')){
             $path = $request->file("thumb")->storePublicly(date('Y-m-d',time()));
             $params['thumb'] = '/storage/'. $path;
+            $params['advimg'] = '/storage/'. $path;
         }
         $post = Category::create($params);
         return redirect('/category');
@@ -106,6 +107,7 @@ class CategoryController extends BaseController
         if ($request->file('thumb')){
             $path = $request->file("thumb")->storePublicly(date('Y-m-d',time()));
             $category->thumb = '/storage/'. $path;
+            $category->advimg = '/storage/'. $path;
         }
         $category->save();
         //渲染
@@ -121,6 +123,7 @@ class CategoryController extends BaseController
     public function ishome(Category $category, Request $request)
     {
         $category->ishome = request('ishome');
+        $category->enabled = request('ishome');
         $result           = $category->save();
 
         return $result ? ['error' => 0] : ['error' => 1, 'msg' => '失败',];
