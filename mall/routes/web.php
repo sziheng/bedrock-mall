@@ -36,6 +36,7 @@ Route::put('/category/{category}', '\Bedrock\Http\Controllers\Web\CategoryContro
 //分类显示/隐藏
 Route::post('/category/{category}/ishome', '\Bedrock\Http\Controllers\Web\CategoryController@ishome');
 
+
 //商品模块
 Route::get('/good', '\Bedrock\Http\Controllers\Web\GoodController@index');
 
@@ -52,4 +53,6 @@ Route::post('/good/checked', '\Bedrock\Http\Controllers\Web\GoodController@check
 Route::post('/good/delete', '\Bedrock\Http\Controllers\Web\GoodController@delete');
 
 
+//订单概述页面
+Route::get('/order', '\Bedrock\Http\Controllers\Web\OrderController@index');
 

@@ -9,5 +9,5 @@ namespace Bedrock\Models;
  */
 class Order extends BaseModel
 {
-
+    protected $table = 'ims_weshop_order';
 }
