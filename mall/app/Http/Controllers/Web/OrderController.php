@@ -1,8 +1,6 @@
 <?php
 namespace Bedrock\Http\Controllers\Web;
 
-use Illuminate\Http\Request;
-
 class OrderController extends BaseController
 {
     public function index()
@@ -39,30 +37,27 @@ class OrderController extends BaseController
     protected function selectOrderPrice($day = 0)
     {
         global $_W;
-        $day = (int) $day;
-        $uniacid=65;
-        if ($day != 0)
-        {
+        $day     = (int)$day;
+        $uniacid = 65;
+        if ($day != 0) {
             $createtime1 = strtotime(date('Y-m-d', time() - ($day * 3600 * 24)));
             $createtime2 = strtotime(date('Y-m-d', time()));
-        }
-        else
-        {
+        } else {
             $createtime1 = strtotime(date('Y-m-d', time()));
             $createtime2 = strtotime(date('Y-m-d', time() + (3600 * 24)));
         }
-        $pdo_res = DB::table('order')->where('uniacid',$uniacid)->get();
+        $pdo_res = DB::table('order')->where('uniacid', $uniacid)->get();
         print_r($pdo_res);
         exit;
-        $sql = 'select id,price,createtime from ' . tablename('weshop_order') . ' where uniacid = :uniacid and ismr=0 and isparent=0 and (status > 0 or ( status=0 and paytype=3)) and deleted=0 and createtime between :createtime1 and :createtime2';
-        $param = array(':uniacid' => $_W['uniacid'], ':createtime1' => $createtime1, ':createtime2' => $createtime2);
+        $sql     = 'select id,price,createtime from ' . tablename('weshop_order') . ' where uniacid = :uniacid and ismr=0 and isparent=0 and (status > 0 or ( status=0 and paytype=3)) and deleted=0 and createtime between :createtime1 and :createtime2';
+        $param   = [':uniacid' => $_W['uniacid'], ':createtime1' => $createtime1, ':createtime2' => $createtime2];
         $pdo_res = pdo_fetchall($sql, $param);
-        $price = 0;
-        foreach ($pdo_res as $arr )
-        {
+        $price   = 0;
+        foreach ($pdo_res as $arr) {
             $price += $arr['price'];
         }
-        $result = array('price' => round($price, 1), 'count' => count($pdo_res), 'fetchall' => $pdo_res);
+        $result = ['price' => round($price, 1), 'count' => count($pdo_res), 'fetchall' => $pdo_res];
+
         return $result;
     }
 }
