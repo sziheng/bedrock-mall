@@ -5,8 +5,9 @@ namespace Bedrock\Models;
 
 class Good extends Model
 {
-    //禁止 create_at 与 update_at;
-    public $timestamps = false;
+    protected $table = 'ims_shop_goods';
+
+    protected $timestamps = false;
 
     public function categories()
     {
@@ -16,6 +17,11 @@ class Good extends Model
     public function merchUser()
     {
         return $this->belongsTo('Bedrock\Models\MerchUser', 'merchid');
-
     }
+
+    public function address()
+    {
+        return $this->hasOne('Bedrock\Modes\Address', 'Add_Code', 'sheng');
+    }
+
 }
