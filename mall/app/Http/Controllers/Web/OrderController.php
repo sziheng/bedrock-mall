@@ -5,9 +5,79 @@ use Illuminate\Http\Request;
 
 class OrderController extends BaseController
 {
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function index()
     {
         return view('admin.order.index');
+    }
+
+    /**
+     * 全部订单
+     */
+    public function list()
+    {
+        return view('admin.order.list');
+    }
+
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public  function status0()
+    {
+        return view('admin.order.list');
+    }
+
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public  function status1()
+    {
+        return view('admin.order.list');
+    }
+
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public  function status2()
+    {
+        return view('admin.order.list');
+    }
+
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View\
+     */
+    public  function status3()
+    {
+        return view('admin.order.list');
+    }
+
+    /**
+     * 已关闭订单
+     */
+    public function closed()
+    {
+
+    }
+    public function status4()
+    {
+
+    }
+    /**
+     * 自定义导出功能
+     */
+    public  function  export()
+    {
+
+    }
+
+    /**
+     * 批量发货
+     */
+    public function batchsend()
+    {
+
     }
 
     /**
@@ -24,7 +94,6 @@ class OrderController extends BaseController
      */
     protected function order($day)
     {
-        global $_GPC;
         $day = (int) $day;
         $orderPrice = $this->selectOrderPrice($day);
         $orderPrice['avg'] = (empty($orderPrice['count']) ? 0 : round($orderPrice['price'] / $orderPrice['count'], 1));
@@ -32,37 +101,5 @@ class OrderController extends BaseController
         return $orderPrice;
     }
 
-    /**
-     * @param int $day
-     * @return array
-     */
-    protected function selectOrderPrice($day = 0)
-    {
-        global $_W;
-        $day = (int) $day;
-        $uniacid=65;
-        if ($day != 0)
-        {
-            $createtime1 = strtotime(date('Y-m-d', time() - ($day * 3600 * 24)));
-            $createtime2 = strtotime(date('Y-m-d', time()));
-        }
-        else
-        {
-            $createtime1 = strtotime(date('Y-m-d', time()));
-            $createtime2 = strtotime(date('Y-m-d', time() + (3600 * 24)));
-        }
-        $pdo_res = DB::table('order')->where('uniacid',$uniacid)->get();
-        print_r($pdo_res);
-        exit;
-        $sql = 'select id,price,createtime from ' . tablename('weshop_order') . ' where uniacid = :uniacid and ismr=0 and isparent=0 and (status > 0 or ( status=0 and paytype=3)) and deleted=0 and createtime between :createtime1 and :createtime2';
-        $param = array(':uniacid' => $_W['uniacid'], ':createtime1' => $createtime1, ':createtime2' => $createtime2);
-        $pdo_res = pdo_fetchall($sql, $param);
-        $price = 0;
-        foreach ($pdo_res as $arr )
-        {
-            $price += $arr['price'];
-        }
-        $result = array('price' => round($price, 1), 'count' => count($pdo_res), 'fetchall' => $pdo_res);
-        return $result;
-    }
+
 }

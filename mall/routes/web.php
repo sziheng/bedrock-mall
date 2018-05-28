@@ -39,3 +39,6 @@ Route::post('/category/{category}/ishome', '\Bedrock\Http\Controllers\Web\Catego
 
 //订单概述页面
 Route::get('/order', '\Bedrock\Http\Controllers\Web\OrderController@index');
+
+//全部订单
+Route::get('/order/list', '\Bedrock\Http\Controllers\Web\OrderController@list');
