@@ -12,8 +12,10 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return '欢迎光临磐荣商城！';
 });
+
+Route::get('/web', '\Bedrock\Http\Controllers\Web\IndexController@getIndex');
 
 //商品分类模块
 Route::get('/category', '\Bedrock\Http\Controllers\Web\CategoryController@index');

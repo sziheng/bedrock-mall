@@ -18,7 +18,7 @@ class Order extends BaseModel
      * @author Xu Jian <xujian.xyz@gmail.com>
      * @return mixed
      */
-    public function getAllAmount()
+    public function sumAllAmount()
     {
         return self::where('uniacid', 65)->whereIn('status', [1, 2, 3])->sum('price');
     }
@@ -67,6 +67,16 @@ class Order extends BaseModel
     public function ajaxorder()
     {
 
+    }
+
+    /**
+     * 获取平台总订单数
+     * @author Xu Jian <xujian.xyz@gmail.com>
+     * @return mixed
+     */
+    public function getOrderNum()
+    {
+        return self::where('uniacid', 65)->whereIn('status', [1, 2, 3])->where('price', '>', 0)->count();
     }
 
 }

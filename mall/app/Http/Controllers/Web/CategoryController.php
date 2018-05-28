@@ -13,11 +13,14 @@ use Illuminate\Http\Request;
 class CategoryController extends BaseController
 {
     /**
+     * todo 方法注释信息不全
+     * TODO 建议所有控制器里对外暴露的方法统一加上 get 或者 post 作为前缀
      * Create by szh
      * 分类列表
      */
     public function index()
     {
+        //todo 一些查询条件没有加入，uniacid，enabled
         $categorys=Category::paginate(10);
 
         return view('admin.category.index', compact('categorys'));
@@ -38,6 +41,7 @@ class CategoryController extends BaseController
      */
     public function store(Request $request)
     {
+        //todo 该方法实现很不优雅
         $this->validate(request(), [
             'name' => 'required|unique:category|max:255|min:1',
         ]);
@@ -87,6 +91,7 @@ class CategoryController extends BaseController
      * Create by szh
      * @param Category $category
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * todo
      */
     public function update(Category $category, Request $request)
     {
@@ -110,7 +115,7 @@ class CategoryController extends BaseController
             $category->advimg = '/storage/'. $path;
         }
         $category->save();
-        //渲染
+        //渲染 todo 无意义的注释，建议去掉
         return redirect("/category");
     }
 
@@ -119,6 +124,7 @@ class CategoryController extends BaseController
      * @param Category $category
      * @param Request  $request
      * @return array
+     * todo 该方法名不够达意，建议更换，不要延续之前表的命名规范，那是个坑
      */
     public function ishome(Category $category, Request $request)
     {

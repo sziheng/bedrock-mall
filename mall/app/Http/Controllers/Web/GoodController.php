@@ -19,6 +19,10 @@ class GoodController extends Controller
      */
     public function index(Request $request, Category $category)
     {
+        //todo 建议所有从 $request 对象中获取参数统一化，
+        //todo 不要在控制器中书写 SQL ，该方法太长了，所有方法一律不得超过 50 行
+        //todo 这么复杂的逻辑难道不应该放入 Services 中吗？
+
         $condition = $request->status;
         $cate = intval($request->cate);
         $keyword = trim($request->keyword);
@@ -134,6 +138,7 @@ class GoodController extends Controller
         exit;*/
         //获取全部一级分类
         // 获取已执行的查询数组
+        //todo 调试信息为啥不去掉？
         $queries = DB::getQueryLog();
 
         $categorys=$category->list();
@@ -144,6 +149,7 @@ class GoodController extends Controller
     /**
      * Create by szh
      * 选择地址
+     * TODO 同下
      */
     public function address(){
        if (Request()->pcode) {
@@ -159,6 +165,8 @@ class GoodController extends Controller
     /**
      * Create by szh
      * 上下架
+     * todo 方法名怎么能用名词呢？方法是动作啊！
+     *
      */
     public function status(Request $request)
     {
@@ -178,6 +186,8 @@ class GoodController extends Controller
     /**
      * Create by szh
      * 商品审核
+     * TODO 代码结构化？不美观，不易阅读
+     * todo 不要再出现 array() 了，统一使用 【】
      */
     public function checked(Request $request)
     {
@@ -197,6 +207,7 @@ class GoodController extends Controller
     /**
      * Create by szh
      * 商品删除
+     * TODO 删除商品之前难道在逻辑上不去判断下，商品是否存在，如果不存在，应该提示下用户的
      */
     public function delete(Request $request)
     {
