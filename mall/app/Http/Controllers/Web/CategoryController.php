@@ -91,6 +91,7 @@ class CategoryController extends BaseController
      * Create by szh
      * @param Category $category
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * todo
      */
     public function update(Category $category, Request $request)
     {
