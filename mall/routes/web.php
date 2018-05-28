@@ -52,7 +52,12 @@ Route::post('/good/checked', '\Bedrock\Http\Controllers\Web\GoodController@check
 //商品删除
 Route::post('/good/delete', '\Bedrock\Http\Controllers\Web\GoodController@delete');
 
+//商品彻底删除
+
+Route::post('/good/physicsDelete', '\Bedrock\Http\Controllers\Web\GoodController@physicsDelete');
 
 //订单概述页面
 Route::get('/order', '\Bedrock\Http\Controllers\Web\OrderController@index');
+
+
 

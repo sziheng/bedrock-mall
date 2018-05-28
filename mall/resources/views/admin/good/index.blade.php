@@ -40,12 +40,20 @@
                                                         data-params = "1"
                                                         data-type = "list"><i class='fa fa-circle'></i> 上架</button>
                                             @endif
-                                            @if($request->status  == 'stock')
-                                                <button class="btn btn-default btn-sm" type="button" data-toggle='batch-remove' data-confirm="如果商品存在购买记录，会无法关联到商品, 确认要彻底删除吗?" data-href="{php echo webUrl('goods/delete1')}"><i class='fa fa-remove'></i> 彻底删除</button>
-                                                <button class="btn btn-default btn-sm" type="button" data-toggle='batch-remove' data-confirm="确认要恢复?" data-href="{php echo webUrl('goods/restore')}"><i class='fa fa-reply'></i> 恢复到仓库</button>
+                                            @if($request->status  == 'cycle')
+                                                <button class="btn btn-default btn-sm layer" type="button"
+                                                        data-content = "如果商品存在购买记录，会无法关联到商品, 确认要彻底删除吗？"
+                                                        data-url = "/good/physicsDelete"
+                                                        data-params = "1"
+                                                        data-type ="list"><i class='fa fa-remove'></i> 彻底删除</button>
+                                                <button class="btn btn-default btn-sm layer" type="button"
+                                                        data-content = "确认要恢复？"
+                                                        data-url = "/good/delete"
+                                                        data-params = "0"
+                                                        data-type ="list"><i class='fa fa-reply'></i> 恢复到仓库</button>
                                             @else
                                                 <button class="btn btn-default btn-sm layer" type="button"
-                                                        data-content = "确认全部删除？"
+                                                        data-content = "确认要全部删除？"
                                                         data-url = "/good/delete"
                                                         data-params = "1"
                                                         data-type ="list"
@@ -114,7 +122,11 @@
                                         <th class="column-title">价格 </th>
                                         <th class="column-title">库存 </th>
                                         <th class="column-title">销量 </th>
-                                        <th class="column-title">状态 </th>
+                                        @if($request->status != 'cycle')
+                                            <th class="column-title">状态 </th>
+                                        @else
+                                            <th class="column-title" style="width:13%"></th>
+                                        @endif
                                         <th class="column-title no-link last"><span class="nobr">Action</span>
                                         </th>
                                         <th class="bulk-actions" colspan="7">
@@ -144,6 +156,7 @@
                                             <td class=""  style="vertical-align:middle">{{$good->marketprice}}<i class="success fa fa-long-arrow-up"></i></td>
                                             <td class=" " style="vertical-align:middle">{{$good->total}}</td>
                                             <td class=" " style="vertical-align:middle">{{$good->salesreal}}</td>
+                                            @if($request->status != 'cycle')
                                             <td class="a-right a-right " style="vertical-align:middle">
                                                 @if($request->status!='cycle')
                                                     <span class='btn  btn-sm layer  @if($good->status==1) btn-primary @else btn-default @endif'
@@ -166,11 +179,25 @@
 
                                                 @endif
                                             </td>
+                                            @else
+                                                <td></td>
+                                            @endif
+
                                             <td class=" last" style="vertical-align:middle">
                                                 <a  class='btn btn-default btn-sm' href="{php echo webUrl('goods/edit', array('id' => $item['id'],'goodsfrom'=>$goodsfrom,'page'=>$page))}" ><i class='fa fa-edit'></i> 编辑</a>
                                                 @if($request->status=='cycle')
-                                                <a  class='btn btn-default btn-sm' data-toggle='ajaxRemove' href="{php echo webUrl('goods/restore', array('id' => $item['id']))}" data-confirm='确认要恢复?'><i class='fa fa-reply'></i> 恢复到仓库</a>
-                                                <a  class='btn btn-default btn-sm' data-toggle='ajaxRemove' ><i class='fa fa-remove'></i> 彻底删除</a>
+                                                <a  class='btn btn-default btn-sm layer'
+                                                    data-content = "确认要恢复？"
+                                                    data-url = "/good/delete"
+                                                    data-params = "0"
+                                                    data-type ="one"
+                                                    data-id = "{{$good->id}}"><i class='fa fa-reply'></i> 恢复到仓库</a>
+                                                <a  class='btn btn-default btn-sm layer'
+                                                    data-content = "如果商品存在购买记录，会无法关联到商品, 确认要彻底删除吗？"
+                                                    data-url = "/good/physicsDelete"
+                                                    data-params = "1"
+                                                    data-type ="one"
+                                                    data-id = "{{$good->id}}"></i> 彻底删除</a>
                                                 @else
                                                 <a  class='btn btn-default btn-sm layer'
                                                     data-content = "确认是删除？"
@@ -182,15 +209,17 @@
                                                 @endif
 
                                             </td>
+
                                         </tr>
                                         <tr>
                                             <td colspan="4" style="text-align: left;border-top:none;padding:5px 0;">
-                                                @if($good->merchid >0)                                                     @if($good->merchUser->merchname)
+                                                @if($good->merchid >0)
+                                                    @if($good->merchUser->merchname)
                                                         <span class="text-default" style="margin-left: 190px;">商户名称:</span><span class="text-info">{{$good->merchUser->merchname}}</span>
                                                     @endif
                                                 @endif
                                             </td>
-                                            <td colspan="@if($request->status == 'cycle') 4 @else 5 @endif" style="text-align: right;border-top:none;padding:5px 0;">
+                                            <td colspan="@if($request->status == 'cycle') 5 @else 5 @endif" style="text-align: right;border-top:none;padding:5px 0;">
                                                 <ul class="goodul">
                                                     <li><a href="#" class="@if($good->isnew == 1) text-danger @endif">新品</a></li>
                                                     <li><a href="#" class="@if($good->ishot == 1) text-danger @endif">热卖</a></li>
