@@ -18,7 +18,7 @@ class PoorUser extends BaseModel
      * @author Xu Jian <xujian.xyz@gmail.com>
      * @return array
      */
-    public function countFamilyAndPeople()
+    public function countFamilyAndPeople(): array
     {
         $allFamilyNum = self::count();
         $allPeopleNum = self::sum('family_number');

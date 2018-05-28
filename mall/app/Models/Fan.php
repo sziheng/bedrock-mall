@@ -13,7 +13,8 @@ class Fan extends BaseModel
 
     protected $primaryKey = 'fanid';
 
-    protected $timestraps = false;
+    public $timestraps = false;
+
 
     /**
      * 统计关注人数
@@ -22,7 +23,7 @@ class Fan extends BaseModel
      */
     public function countAllFans()
     {
-        return self::count();
+        return self::where('uniacid', 65)->count();
     }
 
 }

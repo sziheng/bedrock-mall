@@ -5,9 +5,20 @@ namespace Bedrock\Models;
 
 class MerchUser extends Model
 {
-    protected $table = "merch_user";
+    protected $table = "ims_weshop_merch_user";
 
-    //禁止 create_at 与 update_at;
     public $timestamps = false;
+
+
+    /**
+     * 统计所有的供应商数量
+     * @author Xu Jian <xujian.xyz@gmail.com>
+     * @return mixed
+     */
+    public function countMerchUsers()
+    {
+        return self::where('uniacid', 65)->where('status', 1)->count();
+    }
+
 
 }
