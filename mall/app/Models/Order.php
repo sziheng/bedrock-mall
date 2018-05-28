@@ -23,4 +23,50 @@ class Order extends BaseModel
         return self::where('uniacid', 65)->whereIn('status', [1, 2, 3])->sum('price');
     }
 
+    /**
+     * 获取订单数据
+     * @param $parameter
+     * @return mixed
+     */
+    public function  getorderData($parameter)
+    {
+        return self::where('uniacid', 65)->where($parameter)->all();
+    }
+
+    public function getAllorderData()
+    {
+
+    }
+
+    /**
+     * 获取订单详细数据
+     */
+    public function  getOrder()
+    {
+
+    }
+
+    /**
+     * 根据订单Id修改订单
+     */
+    public function setOrderById()
+    {
+
+    }
+
+    public function  selectOrderPrice()
+    {
+
+    }
+
+    public function  ajaxtransaction()
+    {
+
+    }
+
+    public function ajaxorder()
+    {
+
+    }
+
 }
