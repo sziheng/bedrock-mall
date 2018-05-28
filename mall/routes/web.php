@@ -37,8 +37,27 @@ Route::put('/category/{category}', '\Bedrock\Http\Controllers\Web\CategoryContro
 Route::post('/category/{category}/ishome', '\Bedrock\Http\Controllers\Web\CategoryController@ishome');
 
 
+//商品模块
+Route::get('/good', '\Bedrock\Http\Controllers\Web\GoodController@index');
+
+//地址联动
+Route::post('/good/address', '\Bedrock\Http\Controllers\Web\GoodController@address');
+
+//商品上下架
+Route::post('/good/status', '\Bedrock\Http\Controllers\Web\GoodController@status');
+
+//商品审核
+Route::post('/good/checked', '\Bedrock\Http\Controllers\Web\GoodController@checked');
+
+//商品删除
+Route::post('/good/delete', '\Bedrock\Http\Controllers\Web\GoodController@delete');
+
+//商品彻底删除
+
+Route::post('/good/physicsDelete', '\Bedrock\Http\Controllers\Web\GoodController@physicsDelete');
+
 //订单概述页面
 Route::get('/order', '\Bedrock\Http\Controllers\Web\OrderController@index');
 
-//全部订单
-Route::get('/order/list', '\Bedrock\Http\Controllers\Web\OrderController@list');
+
+

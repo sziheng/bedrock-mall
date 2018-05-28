@@ -63,7 +63,10 @@
                     </li>
                     <li><a><i class="fa fa-bar-chart-o"></i> 商品管理 <span class="fa fa-chevron-down"></span></a>
                         <ul class="nav child_menu">
-                            <li><a href="chartjs.html">商品列表</a></li>
+                            <li><a href="/good?status=sale">出售中</a></li>
+                            <li><a href="/good?status=out">已售罄</a></li>
+                            <li><a href="/good?status=stock">仓库中</a></li>
+                            <li><a href="/good?status=cycle">回收站</a></li>
                             <li><a href="/category">商品分类</a></li>
                         </ul>
                     </li>

@@ -10,37 +10,17 @@ namespace Bedrock\Models;
 class Order extends BaseModel
 {
     protected $table = 'ims_weshop_order';
-    protected $timestraps = false;
+
+    protected $primaryKey = 'ordersn';
 
     /**
-     * @param int $day
-     * @return array
+     * 获取平台总销售额
+     * @author Xu Jian <xujian.xyz@gmail.com>
+     * @return mixed
      */
-    public function selectOrderPrice($day = 0)
+    public function getAllAmount()
     {
-        $day = (int) $day;
-        $uniacid=65;
-        if ($day != 0)
-        {
-            $createtime1 = strtotime(date('Y-m-d', time() - ($day * 3600 * 24)));
-            $createtime2 = strtotime(date('Y-m-d', time()));
-        }
-        else
-        {
-            $createtime1 = strtotime(date('Y-m-d', time()));
-            $createtime2 = strtotime(date('Y-m-d', time() + (3600 * 24)));
-        }
-        $pdo_res = DB::table('order')->where('uniacid',65)->get();
-
-        $sql = 'select id,price,createtime from ' . tablename('weshop_order') . ' where uniacid = :uniacid and ismr=0 and isparent=0 and (status > 0 or ( status=0 and paytype=3)) and deleted=0 and createtime between :createtime1 and :createtime2';
-        $param = array(':uniacid' => $_W['uniacid'], ':createtime1' => $createtime1, ':createtime2' => $createtime2);
-
-        $price = 0;
-        foreach ($pdo_res as $arr )
-        {
-            $price += $arr['price'];
-        }
-        $result = array('price' => round($price, 1), 'count' => count($pdo_res), 'fetchall' => $pdo_res);
-        return $result;
+        return self::where('uniacid', 65)->whereIn('status', [1, 2, 3])->sum('price');
     }
+
 }
