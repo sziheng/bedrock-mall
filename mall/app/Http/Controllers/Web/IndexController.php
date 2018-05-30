@@ -48,7 +48,7 @@ class IndexController extends BaseController
     /**
      * 首页页面展示数据
      * @author Xu Jian <xujian.xyz@gmail.com>
-     * @return void
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function getIndex()
     {
@@ -66,6 +66,20 @@ class IndexController extends BaseController
         $allMerchUsers = $this->merchUser->countMerchUsers();
 
         $allPoorFamilierAndPeople = $this->poorUser->countFamilyAndPeople();
+
+
+        return view('admin.home.index', [
+            'allAmount'                => $allOrdersAmount + $allCompaiesAmount,
+            'allOrdersAmount'          => $allOrdersAmount,
+            'allPoorFamilierAndPeople' => $allPoorFamilierAndPeople,
+            'allCompaiesAmount'        => $allCompaiesAmount,
+            'allMerchUsers'            => $allMerchUsers,
+            'allFansNum'               => $allFansNum,
+            'allOrdersNum'             => $allOrdersNum,
+            'allGoodsNum'              => $allGoodsNum
+        ]);
+
+
 
 
 
