@@ -84,3 +84,4 @@
 <script src="/vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
 <!-- Custom Theme Scripts -->
 <script src="/build/js/custom.min.js"></script>
+<sctipt src="/echarts/echarts-all.js"></sctipt>
