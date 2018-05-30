@@ -3,14 +3,18 @@ namespace Bedrock\Http\Controllers\Web;
 
 use Bedrock\Models\Order;
 use Bedrock\Models\OrderGoods;
+use Bedrock\Models\Good;
 
 class OrderController extends BaseController
 {
     protected $order;
+    protected $ordergoods;
+    protected $goods;
 
-
-    public function __construct(Order $order) {
+    public function __construct(Order $order,OrderGoods $ordergoods,Good $goods) {
         $this->order     = $order;
+        $this->ordergoods     = $ordergoods;
+        $this->goods     = $goods;
         parent::__construct();
     }
     public function index()
@@ -19,7 +23,7 @@ class OrderController extends BaseController
     }
     public function  status0()
     {
-         $totals= $this->order->getOrderPrice(7);
+         $totals= $this->goods->merchUser();
            dd($totals);
     }
     /**

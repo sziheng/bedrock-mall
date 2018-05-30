@@ -37,23 +37,7 @@ class Order extends BaseModel
             }
         })->get();
         return $orders;
-    }
 
-    /**
-     * 获取全部订单数据
-     * @author by 王振
-     *
-     */
-    public function getAllorderData()
-    {
-        return self::where(['uniacid' => 65, 'ismr' => 0, 'deleted' => 0, 'isparent' => 0])->paginate(15);
-    }
-
-    /**
-     * 获取订单详细数据
-     */
-    public function getOrder($requests)
-    {
         $orders = Order::select()->with('has_orderitems')->where('status', '>=', config('payment.ORDER_STATE_PAY'))->where(function ($query) use ($requests) {
             if (isset($requests['school_name']) && $requests['school_name']) {
                 $query->where('sid', '=', $requests['school_name']);
@@ -72,6 +56,24 @@ class Order extends BaseModel
                 $query->where('created_at', '<=', $requests['date_time_start']);
             }
         })->get();
+    }
+
+    /**
+     * 获取全部订单数据
+     * @author by 王振
+     *
+     */
+    public function getAllorderData()
+    {
+        return self::where(['uniacid' => 65, 'ismr' => 0, 'deleted' => 0, 'isparent' => 0])->paginate(15);
+    }
+
+    /**
+     * 获取订单详情数据
+     */
+    public function getOrderDetail($requests)
+    {
+
     }
 
 
@@ -168,5 +170,25 @@ class Order extends BaseModel
     {
         return self::where('uniacid', 65)->whereIn('status', [1, 2, 3])->where('price', '>', 0)->count();
     }
+
+    /**
+     * 删除订单（软删除）
+     * by王振
+     */
+    public function deleteOrder($orderid)
+    {
+      return  self::where(['uniacid' => 65,'id'=>$orderid])->update(['deleted'=>1]);
+    }
+
+    /**
+     * 获取单条订单数据
+     * @param $orderid
+     * @return mixed
+     */
+    public function  getopData($orderid)
+    {
+        return  self::where(['uniacid' => 65,'id'=>$orderid])->first();
+    }
+
 
 }

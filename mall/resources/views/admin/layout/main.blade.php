@@ -30,7 +30,8 @@
     <script src="/upload/upload.js"></script>
     <script src="/admin.js"></script>
     <script src="/layer/layer.js"></script>
-
+    {{--<script src="/vendors/echarts/dist/echarts.common.js"></script>--}}
+    <script src="/echarts/echarts-all.js"></script>
 </head>
 
 <body class="nav-md">
@@ -51,6 +52,7 @@
 
 </body>
 </html>
+
 <!-- Bootstrap -->
 <script src="/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
 <!-- FastClick -->
@@ -84,4 +86,3 @@
 <script src="/vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
 <!-- Custom Theme Scripts -->
 <script src="/build/js/custom.min.js"></script>
-<sctipt src="/echarts/echarts-all.js"></sctipt>
