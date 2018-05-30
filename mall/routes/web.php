@@ -58,8 +58,37 @@ Route::post('/good/delete', '\Bedrock\Http\Controllers\Web\GoodController@delete
 
 Route::post('/good/physicsDelete', '\Bedrock\Http\Controllers\Web\GoodController@physicsDelete');
 
+
+/*************订单视图页面****************/
 //订单概述页面
 Route::get('/order', '\Bedrock\Http\Controllers\Web\OrderController@index');
+//待发货订单页面
+Route::get('/order/status1', '\Bedrock\Http\Controllers\Web\OrderController@status1');
+//待收货订单页面
+Route::get('/order/status2', '\Bedrock\Http\Controllers\Web\OrderController@status2');
+//待付款订单页面
+Route::get('/order/status0', '\Bedrock\Http\Controllers\Web\OrderController@status0');
+//已完成订单页面
+Route::get('/order/orderfinish', '\Bedrock\Http\Controllers\Web\OrderController@orderfinish');
+//已关闭订单页面
+Route::get('/order/orderlose', '\Bedrock\Http\Controllers\Web\OrderController@orderlose');
+//全部订单页面
+Route::get('/order/orderlist', '\Bedrock\Http\Controllers\Web\OrderController@orderlist');
+//维权申请订单页面
+Route::get('/order/status4', '\Bedrock\Http\Controllers\Web\OrderController@status4');
+//维权完成订单页面
+Route::get('/order/status5', '\Bedrock\Http\Controllers\Web\OrderController@status5');
+//自定义导出页面
+Route::get('/order/customexport', '\Bedrock\Http\Controllers\Web\OrderController@customexport');
+//批量发货页面
+Route::get('/order/batchsend', '\Bedrock\Http\Controllers\Web\OrderController@batchsend');
 
+//订单详情页面
+Route::get('/order/orderdetail', '\Bedrock\Http\Controllers\Web\OrderController@orderdetail');
 
+/**********************获取数据接口*********************/
+Route::get('/order/ajaxgettotals', '\Bedrock\Http\Controllers\Web\OrderController@ajaxgettotals');
 
+Route::get('/order/ajaxorder', '\Bedrock\Http\Controllers\Web\OrderController@ajaxorder');
+
+Route::get('/order/ajaxtransaction', '\Bedrock\Http\Controllers\Web\OrderController@ajaxtransaction');
