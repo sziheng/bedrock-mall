@@ -23,8 +23,8 @@ class OrderController extends BaseController
     }
     public function  status0()
     {
-         $totals= $this->goods->merchUser();
-           dd($totals);
+        $typename="全部订单";
+        return view('admin.order.list',compact('typename'));
     }
     /**
      * 获取
