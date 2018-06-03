@@ -2,38 +2,36 @@
 @section('content')
 <div class="right_col" role="main">
     <div class="">
-        <div class="row top_tiles">
-            <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                <div class="tile-stats">
-                    <div class="icon"><i class="fa fa-caret-square-o-right"></i></div>
-                    <div class="count">179</div>
-                    <h3>New Sign ups</h3>
-                    <p>Lorem ipsum psdea itgum rixt.</p>
-                </div>
+        <div class="row tile_count">
+            <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+                <span class="count_top"><i class="fa fa-user"></i> 扶贫总额(元)</span>
+                <div class="count">{{sprintf("%.2f", $allAmount)}}</div>
+                <span class="count_bottom"> 太保彩虹计划上线以来扶贫总计 </span>
             </div>
-            <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                <div class="tile-stats">
-                    <div class="icon"><i class="fa fa-comments-o"></i></div>
-                    <div class="count">179</div>
-                    <h3>New Sign ups</h3>
-                    <p>Lorem ipsum psdea itgum rixt.</p>
-                </div>
+            <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+                <span class="count_top"><i class="fa fa-user"></i> 关注人数(位)</span>
+                <div class="count">{{$allFansNum}}</div>
+                <span class="count_bottom"> 太保彩虹计划服务号当前关注人数 </span>
             </div>
-            <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                <div class="tile-stats">
-                    <div class="icon"><i class="fa fa-sort-amount-desc"></i></div>
-                    <div class="count">179</div>
-                    <h3>New Sign ups</h3>
-                    <p>Lorem ipsum psdea itgum rixt.</p>
-                </div>
+            <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+                <span class="count_top"><i class="fa fa-user"></i> 扶贫贫困户(户/人)</span>
+                <div class="count green">{{$allPoorFamilierAndPeople['allFamilyNum'].'/'.$allPoorFamilierAndPeople['allPeopleNum']}}</div>
+                <span class="count_bottom"> 太保彩虹计划当前扶贫的家庭和总人数</span>
             </div>
-            <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                <div class="tile-stats">
-                    <div class="icon"><i class="fa fa-check-square-o"></i></div>
-                    <div class="count">179</div>
-                    <h3>New Sign ups</h3>
-                    <p>Lorem ipsum psdea itgum rixt.</p>
-                </div>
+            <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+                <span class="count_top"><i class="fa fa-user"></i> 个人扶贫总额(元)</span>
+                <div class="count">{{sprintf("%.2f", $allOrdersAmount)}}</div>
+                <span class="count_bottom"> 太保彩虹计划当前爱心人士扶贫总计 </span>
+            </div>
+            <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+                <span class="count_top"><i class="fa fa-user"></i> 企业扶贫总额(元)</span>
+                <div class="count">{{sprintf("%.2f", $allCompaiesAmount)}}</div>
+                <span class="count_bottom">太保彩虹计划当前爱心企业扶贫总计 </span>
+            </div>
+            <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+                <span class="count_top"><i class="fa fa-user"></i> 供应商(家)</span>
+                <div class="count">{{$allMerchUsers}}</div>
+                <span class="count_bottom"> 太保彩虹计划当前拥有的供应商数量 </span>
             </div>
         </div>
 
