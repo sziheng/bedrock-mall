@@ -26,7 +26,12 @@
         "psr-4": {
             "Bedrock\\": "app/",
             "App\\": "app/"
-        }
+        },
+        "files": [
+            "app/helpers/functions.php",
+            "app/helpers/tplFunctions.php"
+        ]
+
     },
     "autoload-dev": {
         "psr-4": {

@@ -2,9 +2,9 @@
 
 namespace Bedrock\Models;
 
-class Category extends Model
+class Category extends BaseModel
 {
-    protected $table = "category";
+    protected $table = "ims_weshop_category";
 
     //禁止 create_at 与 update_at;
     public $timestamps = false;
