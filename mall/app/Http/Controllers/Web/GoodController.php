@@ -27,13 +27,13 @@ class GoodController extends Controller
         $cate = intval($request->cate);
         $keyword = trim($request->keyword);
         DB::enableQueryLog();
-        $sql = Good::leftJoin('merch_user', function ($join) {
-                $join->on('merch_user.id', '=','goods.merchid')->orOn('merch_user.uniacid','=','goods.uniacid');
+        $sql = Good::leftJoin('ims_weshop_merch_user', function ($join) {
+                $join->on('ims_weshop_merch_user.id', '=','ims_weshop_goods.merchid')->orOn('ims_weshop_merch_user.uniacid','=','ims_weshop_goods.uniacid');
             })
-            ->leftJoin('goods_option as op', function ($join) {
-                $join->on('goods.id', '=','op.goodsid');
+            ->leftJoin('ims_weshop_goods_option as op', function ($join) {
+                $join->on('ims_weshop_goods.id', '=','op.goodsid');
             })
-            ->select('goods.*');
+            ->select('ims_weshop_goods.*');
 
         if ($request->province) {
             $address=array(0=>$request->province, 1=>$request->city, 2=>$request->area);
@@ -44,9 +44,9 @@ class GoodController extends Controller
             $sql = $sql
                 ->where(function($query) use($request)
                 {
-                    $query->where('goods.sheng','=',$request->province)
-                          ->where('goods.shi','=',$request->city)
-                          ->where('goods.qu','=',$request->area);
+                    $query->where('ims_weshop_goods.sheng','=',$request->province)
+                          ->where('ims_weshop_goods.shi','=',$request->city)
+                          ->where('ims_weshop_goods.qu','=',$request->area);
                 });
         }
        if ($cate) {
@@ -60,14 +60,14 @@ class GoodController extends Controller
             $sql = $sql
                 ->where(function($query) use($keyword)
                 {
-                    $query->where('goods.id','=',$keyword)
-                        ->orWhere('goods.title','like','%'.$keyword.'%')
-                        ->orWhere('goods.goodssn','like','%'.$keyword.'%')
-                        ->orWhere('goods.productsn','like','%'.$keyword.'%')
+                    $query->where('ims_weshop_goods.id','=',$keyword)
+                        ->orWhere('ims_weshop_goods.title','like','%'.$keyword.'%')
+                        ->orWhere('ims_weshop_goods.ims_weshop_goodssn','like','%'.$keyword.'%')
+                        ->orWhere('ims_weshop_goods.productsn','like','%'.$keyword.'%')
                         ->orWhere('op.title','like','%'.$keyword.'%')
-                        ->orWhere('op.goodssn','like','%'.$keyword.'%')
+                        ->orWhere('op.ims_weshop_goodssn','like','%'.$keyword.'%')
                         ->orWhere('op.productsn','like','%'.$keyword.'%')
-                        ->orWhere('merch_user.merchname','like','%'.$keyword.'%');
+                        ->orWhere('ims_weshop_merch_user.merchname','like','%'.$keyword.'%');
                 });
         }
         switch ($request->status) {
@@ -76,10 +76,10 @@ class GoodController extends Controller
                 $sql = $sql
                     ->where(function($query) use($condition)
                     {
-                        $query->where('goods.status','=','1')
-                            ->where('goods.checked','=',"0")
-                            ->where('goods.total','>',"0")
-                            ->where('goods.deleted','=',"0");
+                        $query->where('ims_weshop_goods.status','=','1')
+                            ->where('ims_weshop_goods.checked','=',"0")
+                            ->where('ims_weshop_goods.total','>',"0")
+                            ->where('ims_weshop_goods.deleted','=',"0");
                     });
                 break;
 
@@ -88,8 +88,8 @@ class GoodController extends Controller
                 $sql = $sql
                     ->where(function($query) use($condition)
                     {
-                        $query->where('goods.total','<=',"0")
-                            ->where('goods.deleted','=',"0");
+                        $query->where('ims_weshop_goods.total','<=',"0")
+                            ->where('ims_weshop_goods.deleted','=',"0");
                     });
                 break;
             case 'stock':
@@ -97,9 +97,9 @@ class GoodController extends Controller
                 $sql = $sql
                     ->where(function($query) use($condition)
                     {
-                        $query->where('goods.status','=',"0")
-                            ->orWhere('goods.checked','=',"1")
-                            ->where('goods.deleted','=','0');
+                        $query->where('ims_weshop_goods.status','=',"0")
+                            ->orWhere('ims_weshop_goods.checked','=',"1")
+                            ->where('ims_weshop_goods.deleted','=','0');
                     });
                 break;
             case 'cycle':
@@ -107,15 +107,15 @@ class GoodController extends Controller
                 $sql = $sql
                     ->where(function($query) use($condition)
                     {
-                        $query->where('goods.deleted','=',"1");
+                        $query->where('ims_weshop_goods.deleted','=',"1");
                     });
                 break;
             default:
                 break;
         }
 
-        $goods = $sql->groupBy('goods.id')
-                     ->orderBy('goods.displayorder','desc')
+        $goods = $sql->groupBy('ims_weshop_goods.id')
+                     ->orderBy('ims_weshop_goods.displayorder','desc')
                      ->paginate(10);
         $page = isset($page)?$request['page']: 1;
         $appendData = $goods->appends(array(

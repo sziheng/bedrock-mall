@@ -92,3 +92,14 @@ Route::get('/order/ajaxgettotals', '\Bedrock\Http\Controllers\Web\OrderControlle
 Route::get('/order/ajaxorder', '\Bedrock\Http\Controllers\Web\OrderController@ajaxorder');
 
 Route::get('/order/ajaxtransaction', '\Bedrock\Http\Controllers\Web\OrderController@ajaxtransaction');
+
+/***供应商模块***/
+
+Route::group(['namespace' => 'web', 'prefix' => 'web/merch_user'],function () {
+    Route::get('/', 'MerchUserController@getIndex');
+    Route::get('/add', 'MerchUserController@getCreate');
+    Route::post('/add', 'MerchUserController@postCreate');
+    Route::get('/{id}/edit', 'MerchUserController@getEdit');
+    Route::post('/{id}/edit', 'MerchUserController@postEdit');
+    Route::post('/{id}/delete', 'MerchUserController@postDelete');
+});
