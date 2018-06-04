@@ -61,7 +61,7 @@
                                             @endif
                                         </div>
                                     </div>
-                                    <div class="col-sm-6 pull-right">
+                                    <div class="col-sm-9 pull-right">
 
                                         <select id="sheng" name='province'  class="input-sm form-control" style='width:90px;display: inline-block' >
 
@@ -149,7 +149,7 @@
                                             </td>
                                             <td style="vertical-align:middle">
                                                 @if($good->pcate>0)
-                                                    <span class="text-info" style="color:#ed5565">[{{object_get($good->categories,'name','暂无分类')}}]</span><br/>
+                                                    <span class="text-info" style="color:#ed5565">[{{object_get($good->categories, 'name', '暂无分类')}}]</span><br/>
                                                 @endif
                                                     {{$good->title}}
                                             </td>
@@ -243,9 +243,6 @@
             </div>
         </div>
     </div>
-    <script>
-        $()
-    </script>
 @endsection
 
 

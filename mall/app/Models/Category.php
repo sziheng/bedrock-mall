@@ -2,7 +2,7 @@
 
 namespace Bedrock\Models;
 
-class Category extends Model
+class Category extends BaseModel
 {
     protected $table = "ims_weshop_category";
 

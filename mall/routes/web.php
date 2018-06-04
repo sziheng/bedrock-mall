@@ -38,15 +38,14 @@ Route::put('/category/{category}', '\Bedrock\Http\Controllers\Web\CategoryContro
 //分类显示/隐藏
 Route::post('/category/{category}/ishome', '\Bedrock\Http\Controllers\Web\CategoryController@ishome');
 
-
 //商品模块
 Route::get('/good', '\Bedrock\Http\Controllers\Web\GoodController@index');
 
 //地址联动
-Route::post('/good/address', '\Bedrock\Http\Controllers\Web\GoodController@address');
+Route::post('/good/chooseAddress', '\Bedrock\Http\Controllers\Web\GoodController@chooseAddress');
 
 //商品上下架
-Route::post('/good/status', '\Bedrock\Http\Controllers\Web\GoodController@status');
+Route::post('/good/status', '\Bedrock\Http\Controllers\Web\GoodController@changeStatus');
 
 //商品审核
 Route::post('/good/checked', '\Bedrock\Http\Controllers\Web\GoodController@checked');
@@ -55,8 +54,23 @@ Route::post('/good/checked', '\Bedrock\Http\Controllers\Web\GoodController@check
 Route::post('/good/delete', '\Bedrock\Http\Controllers\Web\GoodController@delete');
 
 //商品彻底删除
-
 Route::post('/good/physicsDelete', '\Bedrock\Http\Controllers\Web\GoodController@physicsDelete');
+
+//编辑商品
+Route::get('/good/{good}/edit', '\Bedrock\Http\Controllers\Web\GoodController@edit');
+
+//商品模块新增参数
+Route::get('/good/addParams', '\Bedrock\Http\Controllers\Web\GoodController@addParams');
+
+//商品模块新增操作
+Route::post('/good', '\Bedrock\Http\Controllers\Web\GoodController@store');
+
+//图片上传
+Route::post('/uploadImage', '\Bedrock\Http\Controllers\Web\UploadController@upload');
+//订单概述页面
+Route::get('/order', '\Bedrock\Http\Controllers\Web\OrderController@index');
+
+
 
 
 /*************订单视图页面****************/

@@ -2,7 +2,6 @@
 
 namespace Bedrock\Models;
 
-use Illuminate\Database\Eloquent\Model;
 /**
  * Class BaseModel
  *

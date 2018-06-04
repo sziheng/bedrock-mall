@@ -1,3 +1,8 @@
+$.ajaxSetup({
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+});
 $(function(){
     $("#fileUpload").on('change', function () {
         if (typeof (FileReader) != "undefined") {

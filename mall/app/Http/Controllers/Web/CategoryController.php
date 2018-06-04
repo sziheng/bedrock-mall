@@ -43,7 +43,7 @@ class CategoryController extends BaseController
     {
         //todo 该方法实现很不优雅
         $this->validate(request(), [
-            'name' => 'required|unique:category|max:255|min:1',
+            'name' => 'required|max:255|min:1',
         ]);
         $params = array_merge(request(['title', 'content']));
 
@@ -53,7 +53,6 @@ class CategoryController extends BaseController
         } else {
             $params['ishome'] = '0';
         }
-
         //图片上传
         if ($request->file('thumb')){
             $path = $request->file("thumb")->storePublicly(date('Y-m-d',time()));
