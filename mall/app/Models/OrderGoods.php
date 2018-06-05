@@ -23,8 +23,11 @@ class OrderGoods extends BaseModel
         return  self::where(['uniacid' => 65,'id'=>$ogid])->first();
     }
 
-    public  function getOrderGoodsData($orderid)
+    /**
+     * 订单商品关联商品模型
+     */
+    public function hanOneGoods()
     {
-
+        return $this->hasOne('Bedrock\Modes\Good', 'id', 'goodsid');
     }
 }

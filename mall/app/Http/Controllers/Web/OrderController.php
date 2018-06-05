@@ -24,6 +24,7 @@ class OrderController extends BaseController
     public function  status0()
     {
         $typename="全部订单";
+        $this->order->hasManyOrderGoods(array('typename'=>'all'));
         return view('admin.order.list',compact('typename'));
     }
     /**

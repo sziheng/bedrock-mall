@@ -13,6 +13,20 @@ class Order extends BaseModel
 
     protected $primaryKey = 'ordersn';
 
+
+    /**
+     * 关联订单商品模型
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function hasManyOrderGoods()
+    {
+        return $this->hasMany('Bedrock\Modes\OrderGoods', 'orderid', 'id');
+    }
+
+    public function hasOneMemberAddress()
+    {
+        return $this->hasOne('Bedrock\Modes\MemberAddress', 'id', 'addressid');
+    }
     /**
      * 获取平台总销售额
      * @author Xu Jian <xujian.xyz@gmail.com>
