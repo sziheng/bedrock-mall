@@ -1,16 +1,19 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: wangzhen
- * Date: 2018/5/30
- * Time: 11:14
- */
 
 namespace Bedrock\Models;
 
-
+/**
+ * Class User
+ *
+ * @package \Bedrock\Models
+ */
 class Dispatch extends BaseModel
 {
     protected $table = 'ims_weshop_dispatch';
-    public $timestamps = false;
+
+    public function getList($merchid)
+    {
+        return  self::where('uniacid', UNIACID)->where('merchid', $merchid)->where('enabled', 1)->orderBy('displayorder', 'desc')->get()->toArray();
+    }
 }
+

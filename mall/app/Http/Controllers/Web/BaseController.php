@@ -9,7 +9,7 @@ use Bedrock\Http\Controllers\Controller;
  *
  * @package \Bedrock\Http\Controllers\Web
  */
-class BaseController extends  Controller
+class BaseController extends Controller
 {
     public function __construct()
     {

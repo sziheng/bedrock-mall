@@ -2,6 +2,7 @@
 
 namespace Bedrock\Http\Middleware;
 
+use Closure;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken as Middleware;
 
 class VerifyCsrfToken extends Middleware
@@ -12,6 +13,13 @@ class VerifyCsrfToken extends Middleware
      * @var array
      */
     protected $except = [
-        //
+        'good/chooseAddress'
     ];
+    public function handle($request, Closure $next)
+    {
+        // 使用CSRF
+        return parent::handle($request, $next);
+        // 禁用CSRF
+        //return $next($request);
+    }
 }

@@ -31,4 +31,13 @@ class Company extends BaseModel
         return self::where('amount', '>', 0)->orderBy('amount', 'desc')->get();
     }
 
+    /**
+     * Create by szh
+     * @return mixed
+     */
+    public function getList()
+    {
+        return self::orderBy('id', 'asc')->get(['id', 'text', 'parentID'])->toArray();
+    }
+
 }
