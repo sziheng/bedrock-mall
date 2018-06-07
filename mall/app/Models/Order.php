@@ -2,6 +2,8 @@
 
 namespace Bedrock\Models;
 
+use Illuminate\Database\Eloquent\Builder;
+
 /**
  * Class Order
  *
@@ -11,7 +13,7 @@ class Order extends BaseModel
 {
     protected $table = 'ims_weshop_order';
 
-    protected $primaryKey = 'ordersn';
+    protected $primaryKey = 'id';
 
 
     /**
@@ -20,12 +22,30 @@ class Order extends BaseModel
      */
     public function hasManyOrderGoods()
     {
-        return $this->hasMany('Bedrock\Modes\OrderGoods', 'orderid', 'id');
+        return $this->hasMany('Bedrock\Models\OrderGoods', 'orderid', 'id');
     }
 
+    /**
+     * 获取订单地址
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
     public function hasOneMemberAddress()
     {
-        return $this->hasOne('Bedrock\Modes\MemberAddress', 'id', 'addressid');
+        return $this->hasOne('Bedrock\Models\MemberAddress', 'id', 'addressid');
+    }
+
+    /**
+     * 获取订单的用户信息
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function hasOneUser()
+    {
+        return $this->hasOne('Bedrock\Models\User', 'openid', 'openid');
+    }
+
+    public  function hasManyThroughGoods()
+    {
+        $this->hasManyThrough('Bedrock\Models\OrderGoods','Bedrock\Models\Good','orderid','');
     }
     /**
      * 获取平台总销售额
@@ -34,7 +54,7 @@ class Order extends BaseModel
      */
     public function sumAllAmount()
     {
-        return self::where('uniacid', 65)->whereIn('status', [1, 2, 3])->sum('price');
+        return self::where('uniacid', UNIACID)->whereIn('status', [1, 2, 3])->sum('price');
     }
 
     /**
@@ -45,31 +65,10 @@ class Order extends BaseModel
      */
     public function getorderData($paras)
     {
-        $orders = self::where(['uniacid' => 65, 'ismr' => 0, 'deleted' => 0, 'isparent' => 0])->where(function ($query) use ($paras) {
-            if (isset($paras['school_name']) && $paras['school_name']) {
-                $query->where('sid', '=', $paras['school_name']);
-            }
-        })->get();
-        return $orders;
+        $orders = self::where(['uniacid' => UNIACID, 'ismr' => 0, 'deleted' => 0, 'isparent' => 0])->where(function ($query) {
 
-        $orders = Order::select()->with('has_orderitems')->where('status', '>=', config('payment.ORDER_STATE_PAY'))->where(function ($query) use ($requests) {
-            if (isset($requests['school_name']) && $requests['school_name']) {
-                $query->where('sid', '=', $requests['school_name']);
-            }
-        })->where(function ($query) use ($requests) {
-            if (isset($requests['dorm_name']) && $requests['dorm_name']) {
-                $query->whereIn('did', $requests['dorm_name']);
-            }
-        })->where(function ($query) use ($requests) {
-            if (!empty($requests['date_time_start']) && !empty($requests['date_time_end'])) {
-                $query->where('created_at', '>=', $requests['date_time_start'])
-                    ->where('created_at', '<=', $requests['date_time_start']);
-            } else if (!empty($data['date_time_start'])) {
-                $query->where('created_at', '>=', $requests['date_time_start']);
-            } else if (!empty($data['date_time_end'])) {
-                $query->where('created_at', '<=', $requests['date_time_start']);
-            }
-        })->get();
+        })->where('id',853)->get()->toArray();
+        return $orders;
     }
 
     /**
@@ -79,7 +78,11 @@ class Order extends BaseModel
      */
     public function getAllorderData()
     {
-        return self::where(['uniacid' => 65, 'ismr' => 0, 'deleted' => 0, 'isparent' => 0])->paginate(15);
+        return self::where(['uniacid' => UNIACID, 'ismr' => 0, 'deleted' => 0, 'isparent' => 0])
+            ->with('hasManyOrderGoods')
+            ->with('hasOneUser')
+            ->with('hasOneMemberAddress')
+            ->where('id',853)->get()->toArray();
     }
 
     /**
@@ -182,7 +185,7 @@ class Order extends BaseModel
      */
     public function getOrderNum()
     {
-        return self::where('uniacid', 65)->whereIn('status', [1, 2, 3])->where('price', '>', 0)->count();
+        return self::where('uniacid', UNIACID)->whereIn('status', [1, 2, 3])->where('price', '>', 0)->count();
     }
 
     /**
@@ -191,7 +194,7 @@ class Order extends BaseModel
      */
     public function deleteOrder($orderid)
     {
-      return  self::where(['uniacid' => 65,'id'=>$orderid])->update(['deleted'=>1]);
+      return  self::where(['uniacid' => UNIACID,'id'=>$orderid])->update(['deleted'=>1]);
     }
 
     /**
@@ -201,7 +204,7 @@ class Order extends BaseModel
      */
     public function  getopData($orderid)
     {
-        return  self::where(['uniacid' => 65,'id'=>$orderid])->first();
+        return  self::where(['uniacid' => UNIACID,'id'=>$orderid])->first();
     }
 
 

@@ -16,6 +16,13 @@ class OrderRefund extends BaseModel
 
     public function  getOrderRefund($orderid)
     {
-        return  self::where(['uniacid' => 65,'orderid'=>$orderid])->first();
+        return  self::where(['uniacid' => UNIACID,'orderid'=>$orderid])->first();
     }
+
+    public function getorderrefundlist($refundid)
+    {
+        return self::where('uniacid', UNIACID)->whereIn('id',$refundid)->get(['id','rtype','status'])->toArray();
+    }
+
+
 }

@@ -28,6 +28,6 @@ class OrderGoods extends BaseModel
      */
     public function hanOneGoods()
     {
-        return $this->hasOne('Bedrock\Modes\Good', 'id', 'goodsid');
+        return $this->hasOne('Bedrock\Models\Good', 'id', 'goodsid');
     }
 }

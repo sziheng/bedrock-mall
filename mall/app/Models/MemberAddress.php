@@ -16,6 +16,11 @@ class MemberAddress extends BaseModel
 
     public function  getMemberAddress($addressid)
     {
-        return  self::where(['uniacid' => 65,'id'=>$addressid])->first();
+        return  self::where(['uniacid' => UNIACID,'id'=>$addressid])->first();
+    }
+
+    public function getmemberaddresslist($addressid)
+    {
+        return self::where('uniacid', UNIACID)->whereIn('id',$addressid)->get(['id','realname','mobile','province','city','area','address'])->toArray();
     }
 }
