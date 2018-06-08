@@ -11,6 +11,8 @@ class Spec extends BaseModel
 {
     protected $table = 'ims_weshop_goods_spec';
 
+    public $timestamps = false;
+
     /**
      * Create by szh
      */

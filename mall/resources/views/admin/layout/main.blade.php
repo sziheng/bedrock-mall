@@ -39,9 +39,9 @@
     <sctipt src="{{ URL::asset('/') }}vendors/jquery/dist/jquery.min.js"></sctipt>
     <script src="/vendors/jquery/dist/jquery.min.js"></script>
     <script src="/upload/upload.js"></script>
-
     <script src="/layer/layer.js"></script>
-
+    <script src="/js/jquery.validate.min.js"></script>
+   {{-- <script src="/submit.js"></script>--}}
 </head>
 
 <body class="nav-md">

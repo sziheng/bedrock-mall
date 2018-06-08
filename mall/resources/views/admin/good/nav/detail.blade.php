@@ -2,7 +2,7 @@
 <div class="form-group">
     <label class="col-sm-2 form-control-static">商品详情</label>
     <div class="col-sm-11">
-            <script id="container" name="content" type="text/plain">
+            <script id="container" name="detailcontent" type="text/plain">
                 {!! $good['content'] !!}
             </script>
     </div>

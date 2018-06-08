@@ -57,16 +57,20 @@ Route::post('/good/delete', '\Bedrock\Http\Controllers\Web\GoodController@delete
 Route::post('/good/physicsDelete', '\Bedrock\Http\Controllers\Web\GoodController@physicsDelete');
 
 //编辑商品
+Route::get('/good/create', '\Bedrock\Http\Controllers\Web\GoodController@create');
+
+//编辑商品
 Route::get('/good/{good}/edit', '\Bedrock\Http\Controllers\Web\GoodController@edit');
 
 //商品模块新增参数
 Route::get('/good/addParams', '\Bedrock\Http\Controllers\Web\GoodController@addParams');
 
-//商品模块新增操作
+//商品模块新增/修改操作
 Route::post('/good', '\Bedrock\Http\Controllers\Web\GoodController@store');
 
 //图片上传
 Route::post('/uploadImage', '\Bedrock\Http\Controllers\Web\UploadController@upload');
+
 //订单概述页面
 Route::get('/order', '\Bedrock\Http\Controllers\Web\OrderController@index');
 
