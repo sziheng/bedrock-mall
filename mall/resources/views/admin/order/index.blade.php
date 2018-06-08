@@ -1,5 +1,8 @@
 @extends('admin.layout.main')
 @section('content')
+
+    <link href="/css/style.css" rel="stylesheet">
+    <script src="/js/order.js"></script>
     <div class="right_col" role="main">
         <div class="">
             <div class="row">
@@ -136,108 +139,4 @@
             </div>
         </div>
     </div>
-
-    <script>
-        $(function () {
-            $.ajax({
-                type: "GET",
-                url: "{php echo webUrl('order/ajaxorder')}",
-                dataType: "json",
-                success: function (data) {
-                    var json = data.result;
-                    $(".today-count").text(json.order0.count);
-                    $(".today-price").text(json.order0.price);
-                    $(".today-avg").text(json.order0.avg);
-
-                    $(".yesterday-count").text(json.order1.count);
-                    $(".yesterday-price").text(json.order1.price);
-                    $(".yesterday-avg").text(json.order1.avg);
-
-                    $(".seven-count").text(json.order7.count);
-                    $(".seven-price").text(json.order7.price);
-                    $(".seven-avg").text(json.order7.avg);
-
-                    $(".month-count").text(json.order30.count);
-                    $(".month-price").text(json.order30.price);
-                    $(".month-avg").text(json.order30.avg);
-
-                    $.ajax({
-                        type: "GET",
-                        async: false,
-                        url: "{php echo webUrl('order/ajaxtransaction')}",
-                        dataType: "json",
-                        success: function (json) {
-                            myrequire(['echarts'], function () {
-                                var lineChart = echarts.init(document.getElementById("echarts-line-chart"));
-                                var lineoption = {
-                                    title: {
-                                        text: '最近7日交易走势'
-                                    },
-                                    tooltip: {
-                                        trigger: 'axis'
-                                    },
-                                    legend: {
-                                        data: ['成交额', '成交量']
-                                    },
-                                    grid: {
-                                        x: 50,
-                                        x2: 50,
-                                        y2: 30
-                                    },
-                                    calculable: true,
-                                    xAxis: [
-                                        {
-                                            type: 'category',
-                                            boundaryGap: false,
-                                            data: json.price_key
-                                        }
-                                    ],
-                                    yAxis: [
-                                        {
-                                            type: 'value',
-                                            axisLabel: {
-                                                formatter: '{value}'
-                                            }
-                                        }
-                                    ],
-                                    series: [
-                                        {
-                                            name: '成交额',
-                                            type: 'line',
-                                            data: json.price_value,
-                                            markPoint: {
-                                                data: [
-                                                    {type: 'max', name: '最大值'},
-                                                    {type: 'min', name: '最小值'}
-                                                ]
-                                            },
-                                            markLine: {
-                                                data: [
-                                                    {type: 'average', name: '平均值'}
-                                                ]
-                                            }
-                                        },
-                                        {
-                                            name: '成交量',
-                                            type: 'line',
-                                            data: json.count_value,
-                                            markLine: {
-                                                data: [
-                                                    {type: 'average', name: '平均值'}
-                                                ]
-                                            }
-                                        }
-                                    ]
-                                };
-                                lineChart.setOption(lineoption);
-                                lineChart.resize();
-                            });
-                            $("#echarts-line-chart-loading").hide();
-                            $("#echarts-line-chart").show();
-                        }
-                    });
-                }
-            });
-        });
-    </script>
 @endsection

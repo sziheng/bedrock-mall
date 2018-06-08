@@ -74,7 +74,7 @@ class GoodController extends BaseController
      * Create by szh
      * @param Request $request
      */
-    public function index(Request $request)
+    public function index(Request $request, Category $category)
     {
         //todo 建议所有从 $request 对象中获取参数统一化，
         //todo 不要在控制器中书写 SQL ，该方法太长了，所有方法一律不得超过 50 行
@@ -377,6 +377,7 @@ class GoodController extends BaseController
     {
         switch ($this->request->tpl) {
             case 'option':
+
                 return view('admin.good.tpl.spec');
                 break;
             case 'spec':

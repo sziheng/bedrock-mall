@@ -20,5 +20,15 @@ class MerchUser extends Model
         return self::where('uniacid', 65)->where('status', 1)->count();
     }
 
+    /**
+     * 获取所有的供应商
+     * @author Xu Jian <xujian.xyz@gmail.com>
+     * @return mixed
+     */
+    public function getAllMerchUsers()
+    {
+        return self::where('uniacid', 65)->get();
+    }
+
 
 }

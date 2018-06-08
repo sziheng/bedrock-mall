@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Redirect;
  *
  * @package \Bedrock\Http\Controllers\Web
  */
-class BaseController extends  Controller
+class BaseController extends Controller
 {
     public function __construct()
     {

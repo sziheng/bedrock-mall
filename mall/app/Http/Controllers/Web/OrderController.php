@@ -1,63 +1,111 @@
 <?php
 namespace Bedrock\Http\Controllers\Web;
 
+use Bedrock\Models\Order;
+use Bedrock\Models\OrderGoods;
+use Bedrock\Models\Good;
+
 class OrderController extends BaseController
 {
+    protected $order;
+    protected $ordergoods;
+    protected $goods;
+
+    public function __construct(Order $order,OrderGoods $ordergoods,Good $goods) {
+        $this->order     = $order;
+        $this->ordergoods     = $ordergoods;
+        $this->goods     = $goods;
+        parent::__construct();
+    }
     public function index()
     {
         return view('admin.order.index');
     }
-
-    /**
-     * Ajax获取订单概述数据
-     */
-    public  function  orderSummary()
+    public function  status0()
     {
-
+        $typename="全部订单";
+        return view('admin.order.list',compact('typename'));
+    }
+    /**
+     * 获取
+     */
+    public function ajaxgettotals()
+    {
+        $totals['all']=$this->order->getTotalsCount(array('typename'=>'all'));
+        $totals['status_1']=$this->order->getTotalsCount(array('typename'=>'status_1'));
+        $totals['status0']=$this->order->getTotalsCount(array('typename'=>'status0'));
+        $totals['status1']=$this->order->getTotalsCount(array('typename'=>'status1'));
+        $totals['status2']=$this->order->getTotalsCount(array('typename'=>'status2'));
+        $totals['status3']=$this->order->getTotalsCount(array('typename'=>'status3'));
+        $totals['status4']=$this->order->getTotalsCount(array('typename'=>'status4'));
+        $totals['status5']=$this->order->getTotalsCount(array('typename'=>'status5'));
+        dd($totals);
     }
 
-    /**根据天数获取订单数据
-     * @param $day
-     * @return mixed
-     */
-    protected function order($day)
+    public function ajaxorder()
     {
-        global $_GPC;
+        $order0 = $this->orderdata(0);
+        $order1 = $this->orderdata(1);
+        $order7 = $this->orderdata(7);
+        $order30 = $this->orderdata(30);
+        $order7['price'] = $order7['price'] + $order0['price'];
+        $order7['count'] = $order7['count'] + $order0['count'];
+        $order7['avg'] = (empty($order7['count']) ? 0 : round($order7['price'] / $order7['count'], 1));
+        $order30['price'] = $order30['price'] + $order0['price'];
+        $order30['count'] = $order30['count'] + $order0['count'];
+        $order30['avg'] = (empty($order30['count']) ? 0 : round($order30['price'] / $order30['count'], 1));
+        return  array('order0' => $order0, 'order1' => $order1, 'order7' => $order7, 'order30' => $order30);
+    }
+
+    protected function orderdata($day)
+    {
         $day = (int) $day;
-        $orderPrice = $this->selectOrderPrice($day);
+        $orderPrice = $this->order->getOrderPrice($day);
         $orderPrice['avg'] = (empty($orderPrice['count']) ? 0 : round($orderPrice['price'] / $orderPrice['count'], 1));
         unset($orderPrice['fetchall']);
         return $orderPrice;
     }
 
-    /**
-     * @param int $day
-     * @return array
-     */
-    protected function selectOrderPrice($day = 0)
+    protected function selectTransaction($pdo_fetchall, $days = 7)
     {
-        global $_W;
-        $day     = (int)$day;
-        $uniacid = 65;
-        if ($day != 0) {
-            $createtime1 = strtotime(date('Y-m-d', time() - ($day * 3600 * 24)));
-            $createtime2 = strtotime(date('Y-m-d', time()));
-        } else {
-            $createtime1 = strtotime(date('Y-m-d', time()));
-            $createtime2 = strtotime(date('Y-m-d', time() + (3600 * 24)));
+        $transaction = array();
+        $days = (int) $days;
+        if (!empty($pdo_fetchall))
+        {
+            $i = $days;
+            while (1 <= $i)
+            {
+                $transaction['price'][date('Y-m-d', time() - ($i * 3600 * 24))] = 0;
+                $transaction['count'][date('Y-m-d', time() - ($i * 3600 * 24))] = 0;
+                --$i;
+            }
+            foreach ($pdo_fetchall as $key => $value )
+            {
+                if (array_key_exists(date('Y-m-d', $value['createtime']), $transaction['price']))
+                {
+                    $transaction['price'][date('Y-m-d', $value['createtime'])] += $value['price'];
+                    $transaction['count'][date('Y-m-d', $value['createtime'])] += 1;
+                }
+            }
+            return $transaction;
         }
-        $pdo_res = DB::table('order')->where('uniacid', $uniacid)->get();
-        print_r($pdo_res);
-        exit;
-        $sql     = 'select id,price,createtime from ' . tablename('weshop_order') . ' where uniacid = :uniacid and ismr=0 and isparent=0 and (status > 0 or ( status=0 and paytype=3)) and deleted=0 and createtime between :createtime1 and :createtime2';
-        $param   = [':uniacid' => $_W['uniacid'], ':createtime1' => $createtime1, ':createtime2' => $createtime2];
-        $pdo_res = pdo_fetchall($sql, $param);
-        $price   = 0;
-        foreach ($pdo_res as $arr) {
-            $price += $arr['price'];
-        }
-        $result = ['price' => round($price, 1), 'count' => count($pdo_res), 'fetchall' => $pdo_res];
+        return array();
+    }
 
-        return $result;
+    public function ajaxtransaction()
+    {
+        $orderPrice = $this->order->getOrderPrice(7);;
+        $transaction = $this->selectTransaction($orderPrice['fetchall'], 7);
+        if (empty($transaction))
+        {
+            $i = 7;
+            while (1 <= $i)
+            {
+                $transaction['price'][date('Y-m-d', time() - ($i * 3600 * 24))] = 0;
+                $transaction['count'][date('Y-m-d', time() - ($i * 3600 * 24))] = 0;
+                --$i;
+            }
+        }
+        return json_encode(array('price_key' => array_keys($transaction['price']), 'price_value' => array_values($transaction['price']), 'count_value' => array_values($transaction['count'])));
     }
 }
