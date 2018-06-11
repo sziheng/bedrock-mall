@@ -61,7 +61,7 @@
                                             @endif
                                         </div>
                                     </div>
-                                    <div class="col-sm-9 pull-right">
+                                    <div class="col-sm-7 pull-right" >
 
                                         <select id="sheng" name='province'  class="input-sm form-control" style='width:90px;display: inline-block' >
 
@@ -184,7 +184,7 @@
                                             @endif
 
                                             <td class=" last" style="vertical-align:middle">
-                                                <a  class='btn btn-default btn-sm' href="{php echo webUrl('goods/edit', array('id' => $item['id'],'goodsfrom'=>$goodsfrom,'page'=>$page))}" ><i class='fa fa-edit'></i> 编辑</a>
+                                                <a  class='btn btn-default btn-sm' href="/good/{{$good->id}}/edit" ><i class='fa fa-edit'></i> 编辑</a>
                                                 @if($request->status=='cycle')
                                                 <a  class='btn btn-default btn-sm layer'
                                                     data-content = "确认要恢复？"

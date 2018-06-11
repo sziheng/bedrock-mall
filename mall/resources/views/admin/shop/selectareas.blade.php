@@ -1,4 +1,3 @@
-{{--
 <style type='text/css'>
     .province { float:left; position:relative;width:150px; height:35px; line-height:35px;border:1px solid #fff;}
     .province:hover { border:1px solid #f7e4a5;border-bottom:1px solid #fffec6; background:#fffec6;}
@@ -12,29 +11,25 @@
         <div class="modal-content">
             <div class="modal-header"><button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button><h3>选择区域</h3></div>
             <div class="modal-body" style='height:280px;;' > 
-                @foreach($areas['province'] as $value)
-                @if($value['@attributes']['name']=='请选择省份')
-                    @else
-
+                @foreach($address as $value)
                 <div class='province'>
                      <label class='checkbox-inline' style='margin-left:20px;'>
                          <input type='checkbox' class='cityall' style='margin-top:12px;' />
-                         {{$value['@attributes']['name']}}
+                         {{$value['Add_Name']}}
                          <span class="citycount" style='color:#ff6600'></span>
                      </label>
-                    @if(count($value['city']) >0)
+                    @if(count($value['child']) >0)
                     <ul>
-                        @foreach($value['city'] as $city)
+                        @foreach($value['child'] as $city)
                         <li>
                              <label class='checkbox-inline' >
-                                  <input type='checkbox' class='city' style='margin-top:8px;' city="{{$city['@attributes']['name']}}" />{{$city['@attributes']['name']}}
+                                  <input type='checkbox' class='city' style='margin-top:8px;' city="{{$city['Add_Name']}}" />{{$city['Add_Name']}}
                             </label>
                         </li>
                         @endforeach
                     </ul>
                     @endif
                 </div>
-                    @endif
                 @endforeach
             
             </div>
@@ -47,13 +42,13 @@
 </div> 
  <script language='javascript'>
     $(function(){
-   
+
         $('.province').mouseover(function(){
               $(this).find('ul').show();
         }).mouseout(function(){
               $(this).find('ul').hide();
         });
-        
+
         $('.cityall').click(function(){
             var checked = $(this).get(0).checked;
             var citys = $(this).parent().parent().find('.city');
@@ -74,7 +69,7 @@
         $('.city').click(function(){
             var checked = $(this).get(0).checked;
             var cityall = $(this).parent().parent().parent().parent().find('.cityall');
-          
+
             if(checked){
                 cityall.get(0).checked = true;
             }
@@ -85,10 +80,10 @@
             else{
                 cityall.next().html("");
             }
-        });    
-      
+        });
+
     });
-    
+
      function clearSelects(){
          $('.city').attr('checked',false).removeAttr('disabled');
          $('.cityall').attr('checked',false).removeAttr('disabled');
@@ -168,4 +163,4 @@
         })
     
     }
-</script>--}}
+</script>

@@ -1,4 +1,4 @@
-     <div class='spec_item' id='spec_{{$spec['id']}}' >
+<div class='spec_item' id='spec_{{$spec['id']}}' >
          <div style='border:1px solid #e7eaec;padding:10px;margin-bottom: 10px;' >
 	<input name="spec_id[]" type="hidden" class="form-control spec_id" value="{{$spec['id']}}"/>
 	<div class="form-group">

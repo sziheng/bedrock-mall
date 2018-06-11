@@ -5,10 +5,11 @@
         <span class='help-block'>数字越大，排名越靠前,如果为空，默认排序方式为创建时间</span>
     </div>
 </div>
+
 <div class="form-group">
     <label class="col-sm-2 control-label must">商品名称</label>
     <div class="col-sm-7"  style="padding-right:0;" >
-        <input type="text" name="title" id="title" class="form-control" value="{{$good['title']}}" data-rule-required="true" />
+        <input type="text" name="title" id="title" class="form-control" value="{{$good['title']}}"  />
     </div>
     <div class="col-sm-2" style="padding-left:5px">
         <input type="text" name="unit" id="unit" class="form-control" value="{{$good['unit']}}" placeholder="单位, 如: 个/件/包"  />
@@ -82,7 +83,7 @@
 
         <select id="sel_menu2" multiple="multiple" class="form-control" name="cates[]">
             @foreach($categorys as $category)
-                <option value="{{$category['id']}}" @if(is_array($categorys) && in_array($category['id'],$categorys))selected @endif >{{$category['name']}}</option>
+                <option value="{{$category['id']}}" @if(is_array($categorys) && in_array($category['id'],$categorys)) selected @endif >{{$category['name']}}</option>
             @endforeach
         </select>
     </div>
@@ -138,11 +139,13 @@
         <input class="fileupload" type="file" name="thumbs" data-url="/uploadImage" multiple data-option="thumbs[]">
         <div class="imgcontainer">
             @if($good['thumb'])
+                @foreach($good['piclist'] as $image)
                 <div style="width:115px;display:inline-block">
-                    <input name="thumbs[]" value="{{$good['thumb']}}" type="hidden">
-                    <img src="{{$good['thumb']}}" style="width:100px">
+                    <input name="thumbs[]" value="{{$image}}" type="hidden">
+                    <img src="{{$image}}" style="width:100px">
                     <em class="close deleteimg" title="删除这张图片">×</em>
                 </div>
+                @endforeach
             @endif
         </div>
         <span class="help-block image-block">第一张为缩略图，建议为正方型图片，其他为详情页面图片，尺寸建议宽度为640，并保持图片大小一致</span>

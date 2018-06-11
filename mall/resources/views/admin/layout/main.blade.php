@@ -39,10 +39,14 @@
     <sctipt src="{{ URL::asset('/') }}vendors/jquery/dist/jquery.min.js"></sctipt>
     <script src="/vendors/jquery/dist/jquery.min.js"></script>
     <script src="/upload/upload.js"></script>
-
     <script src="/layer/layer.js"></script>
+<<<<<<< HEAD
+    <script src="/js/jquery.validate.min.js"></script>
+   {{-- <script src="/submit.js"></script>--}}
+=======
     {{--<script src="/vendors/echarts/dist/echarts.common.js"></script>--}}
     <script src="/echarts/echarts-all.js"></script>
+>>>>>>> d020a3a6bae19ab2b6a2757f52cf9ca858f67215
 </head>
 
 <body class="nav-md">
