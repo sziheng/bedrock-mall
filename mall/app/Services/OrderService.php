@@ -215,19 +215,11 @@ class OrderService
         }
         $level = 0;
         $olevel=$request->olevel;
-        if (!empty($agentid) && (0 < $level))
-        {
-            //暂时不需要这个功能
-        }
         $is_merch = array();
         $is_merchname = 0;
 
         $list=$this->order->getOrderList(0,$psize);
-        foreach ($list as $key=>$value)
-        {
-            $value['goods']=$this->getordergoods($value['id']);
-            $list[$key]=$value;
-        }
+        $list=$this->recombinationOrder($list);
         return $list;
     }
 
@@ -239,9 +231,13 @@ class OrderService
     public function getordergoods($oid)
     {
         $ordergoods=$this->ordergoods->getOrderGoods($oid);
-        $originalgoods=$this->ordergoods->hanOneGoods()->where('orderid',10957)->get();
-        $goods= $this->set_medias($ordergoods, 'thumb');
-        return $originalgoods;
+        $goods=array();
+        foreach ($ordergoods as $val)
+        {
+            $originalgoods=$this->ordergoods->find($val['id'])->hanOneGoods->toArray();
+            array_push($goods,$originalgoods);
+        }
+        return $goods;
     }
 
     /**
@@ -454,4 +450,136 @@ class OrderService
         }
         return false;
     }
+
+
+    public function is_serialized($data, $strict = true) {
+        if (!is_string($data)) {
+            return false;
+        }
+        $data = trim($data);
+        if ('N;' == $data) {
+            return true;
+        }
+        if (strlen($data) < 4) {
+            return false;
+        }
+        if (':' !== $data[1]) {
+            return false;
+        }
+        if ($strict) {
+            $lastc = substr($data, -1);
+            if (';' !== $lastc && '}' !== $lastc) {
+                return false;
+            }
+        } else {
+            $semicolon = strpos($data, ';');
+            $brace = strpos($data, '}');
+            if (false === $semicolon && false === $brace)
+                return false;
+            if (false !== $semicolon && $semicolon < 3)
+                return false;
+            if (false !== $brace && $brace < 4)
+                return false;
+        }
+        $token = $data[0];
+        switch ($token) {
+            case 's' :
+                if ($strict) {
+                    if ('"' !== substr($data, -2, 1)) {
+                        return false;
+                    }
+                } elseif (false === strpos($data, '"')) {
+                    return false;
+                }
+            case 'a' :
+            case 'O' :
+                return (bool)preg_match("/^{$token}:[0-9]+:/s", $data);
+            case 'b' :
+            case 'i' :
+            case 'd' :
+                $end = $strict ? '$' : '';
+                return (bool)preg_match("/^{$token}:[0-9.E-]+;$end/", $data);
+        }
+        return false;
+    }
+
+    public function iunserializer($value) {
+        if (empty($value)) {
+            return '';
+        }
+        if (!$this->is_serialized($value)) {
+            return $value;
+        }
+        $result = unserialize($value);
+        if ($result === false) {
+            $temp = preg_replace('!s:(\d+):"(.*?)";!se', "'s:'.strlen('$2').':\"$2\";'", $value);
+            return unserialize($temp);
+        }
+        return $result;
+    }
+
+    /**重组订单数据
+     * @param $list
+     * @return mixed
+     */
+    protected function  recombinationOrder($list)
+    {
+        foreach ($list as $key=>$value)
+        {
+            $goods=$this->getordergoods($value['id']);
+            $list[$key]['goods']=$goods;
+            $member= $this->order->find($value['id'])->hasOneUser->toArray();
+            $list[$key]['nickname']=$member['nickname'];
+            $list[$key]['mid']=$member['id'];
+            $list[$key]['mrealname']=$member['nickname'];
+            $list[$key]['mmobile']=$member['mobile'];
+            $address=$this->order->find($value['id'])->hasOneMemberAddress->toArray();
+            $list[$key]['arealname']=$address['realname'];
+            $list[$key]['amobile']=$address['mobile'];
+            $list[$key]['aprovince']=$address['province'];
+            $list[$key]['acity']=$address['city'];
+            $list[$key]['aarea']=$address['area'];
+            $list[$key]['statusvalue']=$value['status'];
+            $list[$key]['aaddress']=$address['address'];
+            if (($value['dispatchtype'] == 1) || !empty($value['isverify']) || !empty($value['virtual']) || !empty($value['isvirtual']))
+            {
+                $value['address'] = '';
+                $carrier = $this->iunserializer($value['carrier']);
+                if (is_array($carrier))
+                {
+                    $list[$key]['addressdata']['realname'] = $value['realname'] = $carrier['carrier_realname'];
+                    $list[$key]['addressdata']['mobile'] = $value['mobile'] = $carrier['carrier_mobile'];
+                }
+            }
+            else
+            {
+                $address = $this->iunserializer($value['address']);
+                $isarray = is_array($address);
+                $list[$key]['realname'] = ($isarray ? $address['realname'] :  $list[$key]['arealname']);
+                $list[$key]['mobile'] = ($isarray ? $address['mobile'] :  $list[$key]['amobile']);
+                $list[$key]['province'] = ($isarray ? $address['province'] :  $list[$key]['aprovince']);
+                $list[$key]['city'] = ($isarray ? $address['city'] :  $list[$key]['acity']);
+                $list[$key]['area'] = ($isarray ? $address['area'] :  $list[$key]['aarea']);
+                $list[$key]['address'] = ($isarray ? $address['address'] :  $list[$key]['aaddress']);
+                $list[$key]['address_province'] =  $list[$key]['province'];
+                $list[$key]['address_city'] =  $list[$key]['city'];
+                $list[$key]['address_area'] =  $list[$key]['area'];
+                $list[$key]['address_address'] =  $list[$key]['address'];
+                $list[$key]['address'] =  $list[$key]['province'] . ' ' .  $list[$key]['city'] . ' ' .  $list[$key]['area'] . ' ' .  $list[$key]['address'];
+                $list[$key]['addressdata'] = array('realname' =>  $list[$key]['realname'], 'mobile' =>  $list[$key]['mobile'], 'address' =>  $list[$key]['address']);
+            }
+
+            $dispatch=$this->order->find($value['id'])->hasOneDispatch==null?array():$this->order->find($value['id'])->hasOneDispatch->toArray();
+            if(count($dispatch)>0)
+            {
+                $list[$key]['dispatchname']=$dispatch['dispatchname'];
+            }else{
+                $list[$key]['dispatchname']='';
+            }
+
+        }
+        return $list;
+    }
+
+
 }

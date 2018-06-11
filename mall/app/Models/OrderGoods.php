@@ -13,6 +13,7 @@ class OrderGoods extends BaseModel
 {
     protected $table = 'ims_weshop_order_goods';
     public $timestamps = false;
+    protected $primaryKey = 'id';
 
     /**获取单条订单商品
      * @param $ogid
@@ -31,10 +32,20 @@ class OrderGoods extends BaseModel
         return $this->hasOne('Bedrock\Models\Good', 'id', 'goodsid');
     }
 
-    public function getGoods($search)
+    /**根据订单Id获取商品信息
+     * @param $oid
+     */
+    public function getGoodsByOid($oid)
     {
-        $model = $this->whereHas('hanOneGoods', function ($query) use ($search) {
-            $query->where('username', 'like', '%' . $search['username'] . '%');
-        })->with(['hanOneGoods:id,username'])->get();
+
+    }
+
+
+    /**
+     * 根据Id获取订单商品
+     */
+    public function getOrderGoodsId($id)
+    {
+
     }
 }

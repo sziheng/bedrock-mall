@@ -42,15 +42,15 @@ class ListController extends BaseController
         $searchtimelist=$this->order->getsearchtimeList();
         $searchfieldlsit=$this->order->getsearchfieldLsit();
         $page = isset($page)?$request['page']: 1;
-       // $list=$this->order->orderlist($request);
+        $list=$this->order->orderlist($request);
         if (empty($request->starttime) || empty($request->endtime))
         {
             $request->starttime = date("Y-m-d H:i",strtotime('-1 month'));
             $request->endtime = date("Y-m-d H:i",time());
         }
-        $goods=$this->order-> getordergoods(11232);
-        print_r($goods);
-      // return view('admin.order.list',compact('typename','request','customurl','paytypelist','searchtimelist','searchfieldlsit','list'));
+
+//print_r($list);
+      return view('admin.order.list',compact('typename','request','customurl','paytypelist','searchtimelist','searchfieldlsit','list'));
     }
 
     /**待发货订单列表
