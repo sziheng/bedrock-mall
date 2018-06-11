@@ -43,6 +43,21 @@ class Order extends BaseModel
         return $this->hasOne('Bedrock\Models\User', 'openid', 'openid');
     }
 
+    public function hasOneOrderRefund()
+    {
+        return $this->hasOne('Bedrock\Models\OrderRefund', 'id', 'refundid');
+    }
+
+    public function hasOneDispatch()
+    {
+        return $this->hasOne('Bedrock\Models\Dispatch', 'id', 'dispatchid');
+    }
+
+    public function hasOneSaler()
+    {
+        return $this->hasOne('Bedrock\Models\Saler', 'openid', 'verifyopenid');
+    }
+
     public  function hasManyThroughGoods()
     {
         $this->hasManyThrough('Bedrock\Models\OrderGoods','Bedrock\Models\Good','orderid','');
@@ -63,11 +78,12 @@ class Order extends BaseModel
      * @param $parameter
      * @return mixed
      */
-    public function getorderData($paras)
+    public function getorderData()
     {
-        $orders = self::where(['uniacid' => UNIACID, 'ismr' => 0, 'deleted' => 0, 'isparent' => 0])->where(function ($query) {
-
-        })->where('id',853)->get()->toArray();
+        $orders = self::where(['uniacid' => UNIACID, 'ismr' => 0, 'deleted' => 0, 'isparent' => 0])->with(array('hasManyOrderGoods'=>
+            function ($query) {
+                $query->select('id','orderid');
+            }))->where('id',853)->get()->toArray();
         return $orders;
     }
 
@@ -76,15 +92,156 @@ class Order extends BaseModel
      * @author by 王振
      *
      */
-    public function getAllorderData()
+    public function getAllorderData($paras,$request)
     {
         return self::where(['uniacid' => UNIACID, 'ismr' => 0, 'deleted' => 0, 'isparent' => 0])
             ->with('hasManyOrderGoods')
             ->with('hasOneUser')
             ->with('hasOneMemberAddress')
-            ->where('id',853)->get()->toArray();
+            ->with('hasOneOrderRefund')
+            ->with('hasOneDispatch')
+            ->with('hasOneSaler')
+            ->where(function ($query) use ($paras,$request){
+                if (isset($paras['searchtime'])) {
+                    $query->where($paras['searchtime'],'>=',$request['starttime'])->where($paras['searchtime'],'<=',$request['endtime']);
+                }
+            })
+            ->where(function ($query) use ($paras){
+                if (isset($paras['paytype']) && $paras['paytype'] == '2') {
+                    $query->where('paytype',2)
+                        ->orWhere(function($query){
+                            $query->where('paytype', 22);
+                        })
+                        ->orWhere(function($query){
+                            $query->where('paytype', 23);
+                        });
+                }else{
+                    $query->where('paytype',intval($paras['paytype']));
+                }
+            })
+            ->where(function ($query) use ($paras){
+                if (isset($paras['status'])) {
+                    switch ($paras['status'])
+                    {
+                        case '-1':
+                            $query->where('status',-1)->where('refundtime',0);
+                            break;
+                        case '4':
+                            $query->where('refundstate','>',0)->where('refundid','<>',0);
+                            break;
+                        case '5':
+                            $query->where('refundtime','<>',0);
+                            break;
+                        case '1':
+                            $query->where('status',1)
+                                ->orWhere(function($query){
+                                    $query->where('status', 0)->where('paytype',3);
+                                });
+                            break;
+                        case '0':
+                            $query->where('status',0)->where('paytype','<>',3);
+                            break;
+                        default:
+                            $query->where('refundtime',intval($paras['status']));
+                            break;
+                    }
+                }
+            })
+            ->where(function ($query) use ($paras){
+                if (isset($paras['searchfield'])) {
+                    switch ($paras['searchfield'])
+                    {
+                        case  'ordersn':
+                            $query->where('ordersn', 'like', '%' . $paras['keyword'] . '%');
+                            break;
+                        case  'member':
+                            break;
+                        case  'address':
+                            $query->where('address', 'like', '%' . $paras['keyword'] . '%')
+                                ->orWhere('carrier', 'like', '%' . $paras['keyword'] . '%');
+                            break;
+                        case  'expresssn':
+                            $query->where('expresssn', 'like', '%' . $paras['keyword'] . '%');
+                            break;
+                        case  'saler':
+                            break;
+                        case  'store':
+                            break;
+                        case  'goodstitle':
+                            break;
+                        case  'goodssn':
+                            break;
+                        case  'merch':
+                            break;
+                        case  'activity':
+                            break;
+                    }
+                }
+            })
+            ->groupBy('id')
+            ->orderBy('createtime', 'desc')
+            ->skip($request['offset'])
+            ->take($request['psize'])
+            ->get()->toArray();
+           // ->paginate($request['psize'])->toArray();
     }
 
+    public function getOrderList($paras,$request)
+    {
+        return self::where(['uniacid' => UNIACID, 'ismr' => 0, 'deleted' => 0, 'isparent' => 0])
+            ->where(function ($query) use ($paras,$request){
+                if (isset($paras['searchtime'])) {
+                    $query->where($paras['searchtime'],'>=',$request['starttime'])->where($paras['searchtime'],'<=',$request['endtime']);
+                }
+            })
+            ->where(function ($query) use ($paras){
+                if (isset($paras['paytype']) && $paras['paytype'] == '2') {
+                    $query->where('paytype',2)
+                        ->orWhere(function($query){
+                            $query->where('paytype', 22);
+                        })
+                        ->orWhere(function($query){
+                            $query->where('paytype', 23);
+                        });
+                }else{
+                    $query->where('paytype',intval($paras['paytype']));
+                }
+            })
+            ->where(function ($query) use ($paras){
+                if (isset($paras['status'])) {
+                    switch ($paras['status'])
+                    {
+                        case '-1':
+                            $query->where('status',-1)->where('refundtime',0);
+                            break;
+                        case '4':
+                            $query->where('refundstate','>',0)->where('refundid','<>',0);
+                            break;
+                        case '5':
+                            $query->where('refundtime','<>',0);
+                            break;
+                        case '1':
+                            $query->where('status',1)
+                                ->orWhere(function($query){
+                                    $query->where('status', 0)->where('paytype',3);
+                                });
+                            break;
+                        case '0':
+                            $query->where('status',0)->where('paytype','<>',3);
+                            break;
+                        default:
+                            $query->where('refundtime',intval($paras['status']));
+                            break;
+                    }
+                }
+            })
+            ->groupBy('id')
+            ->orderBy('createtime', 'desc')
+            ->skip(1)
+            ->take(20)
+            ->get()->toArray();
+            //->paginate($request['psize'])  ->toArray();
+    }
     /**
      * 获取订单详情数据
      */

@@ -67,27 +67,32 @@ Route::post('/good', '\Bedrock\Http\Controllers\Web\GoodController@store');
 
 //图片上传
 Route::post('/uploadImage', '\Bedrock\Http\Controllers\Web\UploadController@upload');
+
+/**********************订单概述*********************/
+Route::get('/order/ajaxgettotals', '\Bedrock\Http\Controllers\Web\Order\SummaryController@ajaxgettotals');
+
+Route::get('/order/ajaxorder', '\Bedrock\Http\Controllers\Web\Order\SummaryController@ajaxorder');
+
+Route::get('/order/ajaxtransaction', '\Bedrock\Http\Controllers\Web\Order\SummaryController@ajaxtransaction');
 //订单概述页面
-Route::get('/order', '\Bedrock\Http\Controllers\Web\OrderController@index');
-
-
+Route::get('/order/summary', '\Bedrock\Http\Controllers\Web\Order\SummaryController@index');
 
 
 /*************订单视图页面****************/
-//订单概述页面
-Route::get('/order', '\Bedrock\Http\Controllers\Web\OrderController@index');
-//待发货订单页面
-Route::get('/order/status1', '\Bedrock\Http\Controllers\Web\OrderController@status1');
-//待收货订单页面
-Route::get('/order/status2', '\Bedrock\Http\Controllers\Web\OrderController@status2');
-//待付款订单页面
-Route::get('/order/status0', '\Bedrock\Http\Controllers\Web\OrderController@status0');
-//已完成订单页面
-Route::get('/order/orderfinish', '\Bedrock\Http\Controllers\Web\OrderController@orderfinish');
-//已关闭订单页面
-Route::get('/order/orderlose', '\Bedrock\Http\Controllers\Web\OrderController@orderlose');
 //全部订单页面
-Route::get('/order/orderlist', '\Bedrock\Http\Controllers\Web\OrderController@orderlist');
+Route::get('/order/list', '\Bedrock\Http\Controllers\Web\Order\ListController@index');
+//待发货订单页面
+Route::get('/order/staydelivery', '\Bedrock\Http\Controllers\Web\Order\ListController@staydelivery');
+//待收货订单页面
+Route::get('/order/staytakedelivery', '\Bedrock\Http\Controllers\Web\Order\ListController@staytakedelivery');
+//待付款订单页面
+Route::get('/order/staypayment', '\Bedrock\Http\Controllers\Web\Order\ListController@staypayment');
+//已完成订单页面
+Route::get('/order/orderfinish', '\Bedrock\Http\Controllers\Web\Order\ListController@orderfinish');
+//已关闭订单页面
+Route::get('/order/orderlose', '\Bedrock\Http\Controllers\Web\Order\ListController@orderclose');
+
+
 //维权申请订单页面
 Route::get('/order/status4', '\Bedrock\Http\Controllers\Web\OrderController@status4');
 //维权完成订单页面
@@ -100,12 +105,7 @@ Route::get('/order/batchsend', '\Bedrock\Http\Controllers\Web\OrderController@ba
 //订单详情页面
 Route::get('/order/orderdetail', '\Bedrock\Http\Controllers\Web\OrderController@orderdetail');
 
-/**********************获取数据接口*********************/
-Route::get('/order/ajaxgettotals', '\Bedrock\Http\Controllers\Web\OrderController@ajaxgettotals');
 
-Route::get('/order/ajaxorder', '\Bedrock\Http\Controllers\Web\OrderController@ajaxorder');
-
-Route::get('/order/ajaxtransaction', '\Bedrock\Http\Controllers\Web\OrderController@ajaxtransaction');
 
 /***供应商模块***/
 

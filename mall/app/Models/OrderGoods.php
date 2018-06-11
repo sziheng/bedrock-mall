@@ -18,9 +18,9 @@ class OrderGoods extends BaseModel
      * @param $ogid
      * @return mixed
      */
-    public function getOrderGoods($ogid)
+    public function getOrderGoods($oid)
     {
-        return  self::where(['uniacid' => 65,'id'=>$ogid])->first();
+        return  self::where(['uniacid' => 65,'orderid'=>$oid])->get()->toArray();
     }
 
     /**
@@ -29,5 +29,12 @@ class OrderGoods extends BaseModel
     public function hanOneGoods()
     {
         return $this->hasOne('Bedrock\Models\Good', 'id', 'goodsid');
+    }
+
+    public function getGoods($search)
+    {
+        $model = $this->whereHas('hanOneGoods', function ($query) use ($search) {
+            $query->where('username', 'like', '%' . $search['username'] . '%');
+        })->with(['hanOneGoods:id,username'])->get();
     }
 }
