@@ -36,7 +36,53 @@ class OrderService
      */
     public function getSeniorOrderList(Request $request)
     {
-
+        $status = $request->status;
+        $keyword = trim($request->keyword);
+        $agentid = $request->agentid;
+        $refund = $request->refund;
+        $paytype = $request->paytype;
+        $searchtime = $request->searchtime;
+        $searchfield = $request->searchfield;
+        $page=$request->page;
+        $sendtype = (isset($request->sendtype)? 0 : $request->sendtype);
+        $pindex = max(1, intval($page));
+        $psize = 20;
+        $paras=array();
+        if (true) //是否开放多供应商
+            $is_openmerch = 1;
+        else
+            $is_openmerch = 0;
+        if (empty($starttime) || empty($endtime))
+        {
+            $starttime = strtotime('-1 month');
+            $endtime = time();
+        }
+        if (!empty($searchtime) && is_array( $request->time) && in_array($searchtime, array('create', 'pay', 'send', 'finish')))
+        {
+            $starttime = strtotime($request->time['start']);
+            $endtime = strtotime($request->time['end']);
+            $paras['searchtime']=$searchtime;//参数
+        }
+        if ($request->paytype != '')
+        {
+            $paras['paytype']=$request->paytype;
+        }
+        if (!empty($request->searchfield) && !empty($keyword))
+        {
+            $searchfield = trim(strtolower($request->searchfield));
+            $keyword = trim($keyword);
+            $paras['searchfield']=$searchfield;
+            $paras['keyword']=$keyword;
+            if ($status !== '')
+                $paras['status']=$status;
+        }
+        $level = 0;
+        $olevel=$request->olevel;
+        $is_merch = array();
+        $is_merchname = 0;
+        $list=$this->order->getAllorderData(0,$psize);
+        $list=$this->seniorRecombinationOrder($list);
+        return $list;
     }
 
     /**获取支付方式列表
@@ -235,6 +281,8 @@ class OrderService
         foreach ($ordergoods as $val)
         {
             $originalgoods=$this->ordergoods->find($val['id'])->hanOneGoods->toArray();
+            $originalgoods['realprice']=$val['realprice'];
+            $originalgoods['total']=$val['total'];
             array_push($goods,$originalgoods);
         }
         return $goods;
@@ -524,6 +572,8 @@ class OrderService
      */
     protected function  recombinationOrder($list)
     {
+        $orderstatus=$this->getorderstatus();
+        $paytype=$this->getpaytypeList();
         foreach ($list as $key=>$value)
         {
             $goods=$this->getordergoods($value['id']);
@@ -541,6 +591,65 @@ class OrderService
             $list[$key]['aarea']=$address['area'];
             $list[$key]['statusvalue']=$value['status'];
             $list[$key]['aaddress']=$address['address'];
+            $s = $value['status'];
+            $pt = $value['paytype'];
+            $list[$key]['statusvalue'] = $s;
+            $list[$key]['statuscss'] = $orderstatus[$value['status']]['css'];
+            $list[$key]['status'] = $orderstatus[$value['status']]['name'];
+            $dispatch=$this->order->find($value['id'])->hasOneDispatch==null?array():$this->order->find($value['id'])->hasOneDispatch->toArray();
+            if(count($dispatch)>0)
+            {
+                $list[$key]['dispatchname']=$dispatch['dispatchname'];
+            }else{
+                $list[$key]['dispatchname']='';
+            }
+            if (($pt == 3) && empty($value['statusvalue']))
+            {
+                $value['statuscss'] = $orderstatus[1]['css'];
+                $value['status'] = $orderstatus[1]['name'];
+            }
+            if ($s == 1)
+            {
+                if ($value['isverify'] == 1)
+                {
+                    $value['status'] = '待使用';
+                }
+                else if (empty($value['addressid']))
+                {
+                    $value['status'] = '待取货';
+                }
+            }
+            if ($s == -1)
+            {
+                if (!empty($value['refundtime']))
+                {
+                    $value['status'] = '已退款';
+                }
+            }
+            $list[$key]['paytypevalue'] = $pt;
+            $list[$key]['css'] = $paytype[$pt]['css'];
+            $list[$key]['paytype'] = $paytype[$pt]['name'];
+            $list[$key]['dispatchname'] = (empty($value['addressid']) ? '自提' :  $list[$key]['dispatchname']);
+            if (empty($value['dispatchname']))
+            {
+                $list[$key]['dispatchname'] = '快递';
+            }
+            if ($pt == 3)
+            {
+                $list[$key]['dispatchname'] = '货到付款';
+            }
+            else if ($value['isverify'] == 1)
+            {
+                $list[$key]['dispatchname'] = '线下核销';
+            }
+            else if ($value['isvirtual'] == 1)
+            {
+                $list[$key]['dispatchname'] = '虚拟物品';
+            }
+            else if (!empty($value['virtual']))
+            {
+                $list[$key]['dispatchname'] = '虚拟物品(卡密)<br/>自动发货';
+            }
             if (($value['dispatchtype'] == 1) || !empty($value['isverify']) || !empty($value['virtual']) || !empty($value['isvirtual']))
             {
                 $value['address'] = '';
@@ -569,17 +678,130 @@ class OrderService
                 $list[$key]['addressdata'] = array('realname' =>  $list[$key]['realname'], 'mobile' =>  $list[$key]['mobile'], 'address' =>  $list[$key]['address']);
             }
 
-            $dispatch=$this->order->find($value['id'])->hasOneDispatch==null?array():$this->order->find($value['id'])->hasOneDispatch->toArray();
-            if(count($dispatch)>0)
-            {
-                $list[$key]['dispatchname']=$dispatch['dispatchname'];
-            }else{
-                $list[$key]['dispatchname']='';
-            }
+
 
         }
         return $list;
     }
 
+
+    /**高级查询数据重组
+     * @param $list
+     */
+    protected function seniorRecombinationOrder($list)
+    {
+        $orderstatus=$this->getorderstatus();
+        $paytype=$this->getpaytypeList();
+        if(!empty($list))
+        {
+            foreach ($list as $key=>$value)
+            {
+                $has_many_order_goods=$value['has_many_order_goods'];
+                $has_one_user=$value['has_one_user'];
+                $address=$value['has_one_member_address'];
+                $has_one_order_refund=$value['has_one_order_refund'];
+                $dispatch=$value['has_one_dispatch'];
+                $has_one_saler=$value['has_one_saler'];
+                $goods=$this->getordergoods($value['id']);
+                $list[$key]['goods']=$goods;
+                $list[$key]['nickname']=$has_one_user['nickname'];
+                $list[$key]['mid']=$has_one_user['id'];
+                $list[$key]['mrealname']=$has_one_user['nickname'];
+                $list[$key]['mmobile']=$has_one_user['mobile'];
+                $list[$key]['arealname']=$address['realname'];
+                $list[$key]['amobile']=$address['mobile'];
+                $list[$key]['aprovince']=$address['province'];
+                $list[$key]['acity']=$address['city'];
+                $list[$key]['aarea']=$address['area'];
+                $list[$key]['aaddress']=$address['address'];
+                $s = $value['status'];
+                $pt = $value['paytype'];
+                $list[$key]['statusvalue'] = $s;
+                $list[$key]['statuscss'] = $orderstatus[$value['status']]['css'];
+                $list[$key]['status'] = $orderstatus[$value['status']]['name'];
+                if(count($dispatch)>0)
+                {
+                    $list[$key]['dispatchname']=$dispatch['dispatchname'];
+                }else{
+                    $list[$key]['dispatchname']='';
+                }
+                if (($pt == 3) && empty($value['statusvalue']))
+                {
+                    $value['statuscss'] = $orderstatus[1]['css'];
+                    $value['status'] = $orderstatus[1]['name'];
+                }
+                if ($s == 1)
+                {
+                    if ($value['isverify'] == 1)
+                    {
+                        $value['status'] = '待使用';
+                    }
+                    else if (empty($value['addressid']))
+                    {
+                        $value['status'] = '待取货';
+                    }
+                }
+                if ($s == -1)
+                {
+                    if (!empty($value['refundtime']))
+                    {
+                        $value['status'] = '已退款';
+                    }
+                }
+                $list[$key]['paytypevalue'] = $pt;
+                $list[$key]['css'] = $paytype[$pt]['css'];
+                $list[$key]['paytype'] = $paytype[$pt]['name'];
+                $list[$key]['dispatchname'] = (empty($value['addressid']) ? '自提' :  $list[$key]['dispatchname']);
+                if (empty($value['dispatchname']))
+                {
+                    $list[$key]['dispatchname'] = '快递';
+                }
+                if ($pt == 3)
+                {
+                    $list[$key]['dispatchname'] = '货到付款';
+                }
+                else if ($value['isverify'] == 1)
+                {
+                    $list[$key]['dispatchname'] = '线下核销';
+                }
+                else if ($value['isvirtual'] == 1)
+                {
+                    $list[$key]['dispatchname'] = '虚拟物品';
+                }
+                else if (!empty($value['virtual']))
+                {
+                    $list[$key]['dispatchname'] = '虚拟物品(卡密)<br/>自动发货';
+                }
+                if (($value['dispatchtype'] == 1) || !empty($value['isverify']) || !empty($value['virtual']) || !empty($value['isvirtual']))
+                {
+                    $value['address'] = '';
+                    $carrier = $this->iunserializer($value['carrier']);
+                    if (is_array($carrier))
+                    {
+                        $list[$key]['addressdata']['realname'] = $value['realname'] = $carrier['carrier_realname'];
+                        $list[$key]['addressdata']['mobile'] = $value['mobile'] = $carrier['carrier_mobile'];
+                    }
+                }
+                else
+                {
+                    $address = $this->iunserializer($value['address']);
+                    $isarray = is_array($address);
+                    $list[$key]['realname'] = ($isarray ? $address['realname'] :  $list[$key]['arealname']);
+                    $list[$key]['mobile'] = ($isarray ? $address['mobile'] :  $list[$key]['amobile']);
+                    $list[$key]['province'] = ($isarray ? $address['province'] :  $list[$key]['aprovince']);
+                    $list[$key]['city'] = ($isarray ? $address['city'] :  $list[$key]['acity']);
+                    $list[$key]['area'] = ($isarray ? $address['area'] :  $list[$key]['aarea']);
+                    $list[$key]['address'] = ($isarray ? $address['address'] :  $list[$key]['aaddress']);
+                    $list[$key]['address_province'] =  $list[$key]['province'];
+                    $list[$key]['address_city'] =  $list[$key]['city'];
+                    $list[$key]['address_area'] =  $list[$key]['area'];
+                    $list[$key]['address_address'] =  $list[$key]['address'];
+                    $list[$key]['address'] =  $list[$key]['province'] . ' ' .  $list[$key]['city'] . ' ' .  $list[$key]['area'] . ' ' .  $list[$key]['address'];
+                    $list[$key]['addressdata'] = array('realname' =>  $list[$key]['realname'], 'mobile' =>  $list[$key]['mobile'], 'address' =>  $list[$key]['address']);
+                }
+            }
+        }
+        return $list;
+    }
 
 }

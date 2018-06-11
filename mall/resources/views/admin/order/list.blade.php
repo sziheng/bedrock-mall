@@ -4,6 +4,7 @@
     <script src="/resource/datetimepicker/jquery.datetimepicker.js"></script>
     <link href="/css/style.css" rel="stylesheet">
     <link href="/css/common.css" rel="stylesheet">
+    <script src="/js/orderlsit.js"></script>
     <div class="right_col" role="main">
         <div class="">
             <div class="row">
@@ -145,12 +146,12 @@
                                 </tr>
                                 @foreach($item['goods'] as $k=>$g)
                                 <tr class='trbody'>
-                                    <td style='overflow:hidden;'><img src="{php echo tomedia($g['thumb'])}" style='width:50px;height:50px;border:1px solid #ccc; padding:1px;'></td>
+                                    <td style='overflow:hidden;'><img src="$g['thumb']" style='width:50px;height:50px;border:1px solid #ccc; padding:1px;'></td>
                                     <td style='text-align: left;overflow:hidden;border-left:none;'  >{{$g['title']}}@if(!empty($g['optiontitle']))<br/>{{$g['optiontitle']}}@endif<br/>{{$g['goodssn']}}</td>
-                                    <td style='text-align:right;border-left:none;'>{php echo number_format($g['realprice']/$g['total'],2)}<br/>x{{$g['total']}}</td>
+                                    <td style='text-align:right;border-left:none;'> {{number_format($g['realprice']/$g['total'],2)}}<br/>x{{$g['total']}}</td>
 
                                     @if($k==0)
-                                    <td rowspan="{php echo count($item['goods'])}"  style='text-align: center;' >
+                                    <td rowspan="{{count($item['goods'])}}"  style='text-align: center;' >
                                         {{--{ifp 'member.member.edit'}--}}
                                         @if(true)
                                         <a href="{php echo webUrl('member/list/detail',array('id'=>$item['mid']))}"> {{$item['nickname']}}</a>
@@ -160,7 +161,7 @@
 
                                         <br/>
                                         {{$item['addressdata']['realname']}}<br/>{{$item['addressdata']['mobile']}}</td>
-                                    <td rowspan="{php echo count($item['goods'])}" style='text-align:center;' >
+                                    <td rowspan="{{count($item['goods'])}}" style='text-align:center;' >
 
                                         @if($item['statusvalue'] > 0)
                                         <label class='label label-{$item['css']}'>{{$item['paytype']}}</label>
@@ -179,91 +180,91 @@
                                         <span style='margin-top:5px;display:block;'>{{$item['dispatchname']}}</span>
 
                                     </td>
-                                    <td  rowspan="{php echo count($item['goods'])}" style='text-align:center' >
-                                        ￥{php echo number_format($item['price'],2)} <a data-toggle='popover' data-html='true' data-placement='top'
+                                    <td  rowspan="{{count($item['goods'])}}" style='text-align:center' >
+                                        ￥{{number_format($item['price'],2)}} <a data-toggle='popover' data-html='true' data-placement='top'
                                                                                        data-content="<table style='width:100%;'>
                 <tr>
                     <td  style='border:none;text-align:right;'>商品小计：</td>
-                    <td  style='border:none;text-align:right;;'>￥{php echo number_format( $item['goodsprice'] ,2)}</td>
+                    <td  style='border:none;text-align:right;;'>￥{{ number_format( $item['goodsprice'] ,2)}}</td>
                 </tr>
                 <tr>
                     <td  style='border:none;text-align:right;'>运费：</td>
-                    <td  style='border:none;text-align:right;;'>￥{php echo number_format( $item['olddispatchprice'],2)}</td>
+                    <td  style='border:none;text-align:right;;'>￥{{ number_format( $item['olddispatchprice'],2)}}</td>
                 </tr>
                 {if $item['discountprice']>0}
                 <tr>
                     <td  style='border:none;text-align:right;'>会员折扣：</td>
-                    <td  style='border:none;text-align:right;;'>-￥{php echo number_format( $item['discountprice'],2)}</td>
+                    <td  style='border:none;text-align:right;;'>-￥{{number_format( $item['discountprice'],2)}}</td>
                 </tr>
                 {/if}
                 {if $item['deductprice']>0}
                 <tr>
                     <td  style='border:none;text-align:right;'>积分抵扣：</td>
-                    <td  style='border:none;text-align:right;;'>-￥{php echo number_format( $item['deductprice'],2)}</td>
+                    <td  style='border:none;text-align:right;;'>-￥{{number_format( $item['deductprice'],2)}}</td>
                 </tr>
                 {/if}
                 {if $item['deductcredit2']>0}
                 <tr>
                     <td  style='border:none;text-align:right;'>余额抵扣：</td>
-                    <td  style='border:none;text-align:right;;'>-￥{php echo number_format( $item['deductcredit2'],2)}</td>
+                    <td  style='border:none;text-align:right;;'>-￥{{number_format( $item['deductcredit2'],2)}}</td>
                 </tr>
                 {/if}
                 {if $item['deductenough']>0}
                 <tr>
                     <td  style='border:none;text-align:right;'>商城满额立减：</td>
-                    <td  style='border:none;text-align:right;;'>-￥{php echo number_format( $item['deductenough'],2)}</td>
+                    <td  style='border:none;text-align:right;;'>-￥{{number_format( $item['deductenough'],2)}}</td>
                 </tr>
                 {/if}
                 {if $item['merchdeductenough']>0}
                 <tr>
                     <td  style='border:none;text-align:right;'>商户满额立减：</td>
-                    <td  style='border:none;text-align:right;;'>-￥{php echo number_format( $item['merchdeductenough'],2)}</td>
+                    <td  style='border:none;text-align:right;;'>-￥{{number_format( $item['merchdeductenough'],2)}}</td>
                 </tr>
                 {/if}
                 {if $item['couponprice']>0}
                 <tr>
                     <td  style='border:none;text-align:right;'>优惠券优惠：</td>
-                    <td  style='border:none;text-align:right;;'>-￥{php echo number_format( $item['couponprice'],2)}</td>
+                    <td  style='border:none;text-align:right;;'>-￥{{number_format( $item['couponprice'],2)}}</td>
                 </tr>
                 {/if}
                 {if $item['isdiscountprice']>0}
                 <tr>
                     <td  style='border:none;text-align:right;'>促销优惠：</td>
-                    <td  style='border:none;text-align:right;;'>-￥{php echo number_format( $item['isdiscountprice'],2)}</td>
+                    <td  style='border:none;text-align:right;;'>-￥{{number_format( $item['isdiscountprice'],2)}}</td>
                 </tr>
                 {/if}
                 {if intval($item['changeprice'])!=0}
                 <tr>
                     <td  style='border:none;text-align:right;'>卖家改价：</td>
-                    <td  style='border:none;text-align:right;;'><span style='{if 0<$item['changeprice']}color:green{else}color:red{/if}'>{if 0<$item['changeprice']}+{else}-{/if}￥{php echo number_format(abs($item['changeprice']),2)}</span></td>
+                    <td  style='border:none;text-align:right;;'><span style='{if 0<$item['changeprice']}color:green{else}color:red{/if}'>{if 0<$item['changeprice']}+{else}-{/if}￥{{ number_format(abs($item['changeprice']),2)}}</span></td>
                 </tr>
                 {/if}
                 {if intval($item['changedispatchprice'])!=0}
                 <tr>
                     <td  style='border:none;text-align:right;'>卖家改运费：</td>
-                    <td  style='border:none;text-align:right;;'><span style='{if 0<$item['changedispatchprice']}color:green{else}color:red{/if}'>{if 0<$item['changedispatchprice']}+{else}-{/if}￥{php echo abs($item['changedispatchprice'])}</span></td>
+                    <td  style='border:none;text-align:right;;'><span style='{if 0<$item['changedispatchprice']}color:green{else}color:red{/if}'>{if 0<$item['changedispatchprice']}+{else}-{/if}￥{{abs($item['changedispatchprice'])}}</span></td>
                 </tr>
                 {/if}
                 <tr>
                     <td style='border:none;text-align:right;'>应收款：</td>
-                    <td  style=`'border:none;text-align:right;color:green;'>￥{php echo number_format($item['price'],2)}</td>
+                    <td  style=`'border:none;text-align:right;color:green;'>￥{{number_format($item['price'],2)}}</td>
                 </tr>
 
             </table>
 "
                                         ><i class='fa fa-question-circle'></i></a>
                                         @if($item['dispatchprice']>0)
-                                        <br/>(含运费:￥{php echo number_format( $item['dispatchprice'],2)})
+                                        <br/>(含运费:￥{{number_format( $item['dispatchprice'],2)}})
                                        @endif
 
 
                                     </td>
-                                    <td  rowspan="{php echo count($item['goods'])}" style='text-align:center' >
-                                        {php echo date('Y-m-d',$item['createtime'])}<br/>{php echo date('H:i:s',$item['createtime'])}
+                                    <td  rowspan="{{count($item['goods'])}}" style='text-align:center' >
+                                        {{date('Y-m-d',$item['createtime'])}}<br/>{{date('H:i:s',$item['createtime'])}}
 
                                     </td>
 
-                                    <td   rowspan="{php echo count($item['goods'])}" class='ops' style='line-height:20px;text-align:center' ><span class='text-{$item['statuscss']}'>{{$item['status']}}</span><br />{template 'order/ops'}
+                                    <td   rowspan="{{count($item['goods'])}}" class='ops' style='line-height:20px;text-align:center' ><span class='text-{$item['statuscss']}'>{{$item['status']}}</span><br />
                                     </td>
 
                                     @endif

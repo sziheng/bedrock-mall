@@ -180,10 +180,10 @@ class Order extends BaseModel
             })
             ->groupBy('id')
             ->orderBy('createtime', 'desc')
-            ->skip($request['offset'])
-            ->take($request['psize'])
+            ->skip(0)
+            ->take(20)
             ->get()->toArray();
-           // ->paginate($request['psize'])->toArray();
+          //  ->paginate($request['psize'])->toArray();
     }
 
     public function getOrderList($paras,$request)
@@ -237,7 +237,7 @@ class Order extends BaseModel
             })
             ->groupBy('id')
             ->orderBy('createtime', 'desc')
-            ->skip(1)
+            ->skip(0)
             ->take(20)
             ->get()->toArray();
             //->paginate($request['psize'])  ->toArray();

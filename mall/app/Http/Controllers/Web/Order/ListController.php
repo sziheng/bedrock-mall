@@ -42,7 +42,7 @@ class ListController extends BaseController
         $searchtimelist=$this->order->getsearchtimeList();
         $searchfieldlsit=$this->order->getsearchfieldLsit();
         $page = isset($page)?$request['page']: 1;
-        $list=$this->order->orderlist($request);
+        $list=$this->order->getSeniorOrderList($request);
         if (empty($request->starttime) || empty($request->endtime))
         {
             $request->starttime = date("Y-m-d H:i",strtotime('-1 month'));
