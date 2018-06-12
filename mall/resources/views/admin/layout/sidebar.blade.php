@@ -55,19 +55,19 @@
                             <li><a href="calendar.html">Calendar</a></li>
                         </ul>
                     </li>
-                    <li><a><i class="fa fa-table"></i> Tables <span class="fa fa-chevron-down"></span></a>
+                    <li><a><i class="fa fa-table"></i> 会员模块 <span class="fa fa-chevron-down"></span></a>
                         <ul class="nav child_menu">
-                            <li><a href="/admin/post">Tables</a></li>
-                            <li><a href="tables_dynamic.html">Table Dynamic</a></li>
+                            <li><a href="/web/member">会员概述</a></li>
+                            <li><a href="tables_dynamic.html">会员管理</a></li>
                         </ul>
                     </li>
                     <li><a><i class="fa fa-bar-chart-o"></i> 商品管理 <span class="fa fa-chevron-down"></span></a>
                         <ul class="nav child_menu">
-                            <li><a href="/good?status=sale">出售中</a></li>
-                            <li><a href="/good?status=out">已售罄</a></li>
-                            <li><a href="/good?status=stock">仓库中</a></li>
-                            <li><a href="/good?status=cycle">回收站</a></li>
-                            <li><a href="/category">商品分类</a></li>
+                            <li><a href="/web/good?status=sale">出售中</a></li>
+                            <li><a href="/web/good?status=out">已售罄</a></li>
+                            <li><a href="/web/good?status=stock">仓库中</a></li>
+                            <li><a href="/web/good?status=cycle">回收站</a></li>
+                            <li><a href="/web/category">商品分类</a></li>
                         </ul>
                     </li>
                     <li><a><i class="fa fa-clone"></i>Layouts <span class="fa fa-chevron-down"></span></a>

@@ -403,6 +403,20 @@
 
         isdiscount_change();
 
+    function commission_change() {
+        var html = '<table class="table table-bordered table-condensed"><thead><tr class="active">{loop $commission_level $level}<th><div class=""><div style="padding-bottom:10px;text-align:center;">{$level["levelname"]}</div></div></th>{/loop}</tr></thead><tbody><tr>{loop $commission_level $level}{if $level["key"]=="default"}<td>{php for ($c_i = 0; $c_i < $_W["shopset"]["commission"]["level"]; $c_i++): }<input name="commission_level_{$level["key"]}_default[]" type="text" class="form-control commission_{$level["key"]} commission_{$level["key"]}_default" value="{php echo $commission[$level["key"]]["option0"][$c_i ];}" style="display:inline;width: {php echo (96 / $_W["shopset"]["commission"]["level"])}%;" placeholder="{php echo $c_i+1}级"> {php endfor;}</td>{else}<td>{php for ($c_i = 0; $c_i < $_W["shopset"]["commission"]["level"]; $c_i++): }<input name="commission_level_{$level["id"]}_default[]" type="text" class="form-control commission_level{$level["id"]} commission_{$level["key"]}_default" value="{php echo $commission["level".$level["id"]]["option0"][$c_i ];}" style="display:inline;width: {php echo (96 / $_W["shopset"]["commission"]["level"])}%;" placeholder="{php echo $c_i+1}级"> {php endfor;}</td>{/if}{/loop}</tr></tbody></table>';
+        if ($("#commission").html()=='')
+        {
+            $("#commission_default").html(html);
+            $("#commission_default").show();
+        }
+        else
+        {
+            $("#commission_default").html('');
+            $("#commission_default").show();
+        }
+    }
+
 </script>
 {{--
 {template 'shop/selectareas'}--}}

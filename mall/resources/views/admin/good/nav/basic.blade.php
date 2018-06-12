@@ -68,9 +68,11 @@
 
     <select class="form-control select2" id="virtual" name="virtual">
         <option value="0">多规格虚拟物品</option>
+        @if(is_array($virtualTypes))
         @foreach($virtualTypes as $virtualType)
         <option value="{{$virtualType['id']}}" @if($good['virtual'] == $virtualType['id'])selected="true"@endif>{{$virtualType['usedata']}}/{{$virtualType['alldata']}}| {{$virtualType['title']}}</option>
         @endforeach
+        @endif
     </select>
     <span>提示：直接选中虚拟物品模板即可，选择多规格需在商品规格页面设置</span>
 </div>
@@ -83,7 +85,7 @@
 
         <select id="sel_menu2" multiple="multiple" class="form-control" name="cates[]">
             @foreach($categorys as $category)
-                <option value="{{$category['id']}}" @if(is_array($categorys) && in_array($category['id'],$categorys)) selected @endif >{{$category['name']}}</option>
+                <option value="{{$category['id']}}" @if(is_array($categorys) && in_array($category['id'],$good['category'])) selected @endif >{{$category['name']}}</option>
             @endforeach
         </select>
     </div>
@@ -203,21 +205,21 @@
     <div class="col-sm-10 col-xs-10">
         <select id="sheng" name='sheng'  class="form-control" style='width:100px;display: inline-block' >
             @if($good['sheng'])
-            <option value="{{$good['sheng']}}" selected="true">{{$good['province']['Add_Name']}}</option>
+            <option value="{{$good['sheng']}}" selected="true">{{array_get($good['province'],'Add_Name','')}}</option>
             @else
             <option value="" selected="true">省/直辖市</option>
             @endif
         </select>
         <select id="shi" name='shi'   class="form-control" style='width:100px;display: inline-block' >
             @if($good['shi'])
-            <option value="{{$good['sheng']}}" selected="true">{{$good['city']['Add_Name']}}</option>
+            <option value="{{$good['sheng']}}" selected="true">{{array_get($good['city'], 'Add_Name' , '')}}</option>
             @else
             <option value="" selected="true">请选择</option>
             @endif
         </select>
         <select id="qu" name='qu'  class="form-control" style='width:100px; margin-right:10px;display: inline-block;' >
             @if($good['qu'])
-            <option value="{{$good['qu']}}" selected="true">{{$good['area']['Add_Name']}}</option>
+            <option value="{{$good['qu']}}" selected="true">{{array_get($good['area'],'Add_Name','')}}</option>
             @else
             <option value="" selected="true">请选择</option>
             @endif

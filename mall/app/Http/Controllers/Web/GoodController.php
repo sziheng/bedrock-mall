@@ -94,6 +94,7 @@ class GoodController extends BaseController
             $address=array(0=>$request->province, 1=>$request->city, 2=>$request->area);
             $provinces =  $data = $this->address->select('Add_Code','Add_Name')->whereIn('Add_Code', $address)->get();
             $provinces = $provinces->toArray();
+            //dd($provinces);
             $citys =  $data = $this->address->select('Add_Code','Add_Name')->where('Add_Parent', '=', $request->province)->get();
             $areas =  $data = $this->address->select('Add_Code','Add_Name')->where('Add_Parent', '=', $request->city)->get();
             $sql = $sql
@@ -288,14 +289,27 @@ class GoodController extends BaseController
     public function create()
     {
         //暂时这么处理 下礼拜找解决方法
-        $good = Good::find(1284);
-        foreach($good as $key => &$val){
-            $val = '';
+        $goods= Good::limit(1)->get()->toArray();
+        foreach($goods[0] as $key => &$val){
+            $good[$key] = '';
         }
-        $virtualTypes = [];
-        unset($val);
-        $commissionLevels = [];
-        return view('admin.good.create', compact('good', 'commissionLevels' , 'virtualTypes '));
+        $discounts = ['type' => ''];
+        $good['discounts'] = $discounts;
+        $good['piclist'] = [];
+        $good['category'] = [];
+        $data = $this->rendorData($good);
+        $categorys = $data['categorys'];
+        $levels = $data['levels'];
+        $commissionLevels = $data['commissionLevels'];
+        $address = $data['address'];
+        $virtualTypes = $data['virtualTypes'];
+        $dispatchs = $data['dispatchs'];
+        $companyies = $data['companyies'];
+        $shopset_level = $data['shopset_level'];
+        $specs = [];
+        $html['html'] = '';
+        $params = [];
+        return view('admin.good.create', compact('good','categorys', 'levels', 'areas', 'virtualTypes', 'dispatchs', 'companyies', 'params', 'specs', 'commissionLevels' ,'shopset_level','html', 'address', 'discounts'));
     }
     /**
      * Create by szh
@@ -323,13 +337,42 @@ class GoodController extends BaseController
         $specs = $specs->toArray();
         $good = $good->toArray();
         $good['noticetype'] = explode(',', $good['noticetype']);
+        if ($good['cates']) {
+            $good['category'] = is_array(explode(',', $good['cates'])) ? explode(',', $good['cates']) : [];
+        } else {
+            $good['category'] = [];
+        }
         $good['discounts'] = json_decode($good['discounts'], true);
         if ($good['thumb'])
         {
             $good['piclist'] = array_merge([$good['thumb']],iunserializer($good['thumb_url']));
         }
+        $good['province'] = $this->address->getNmae($good['sheng']) ? $this->address->getNmae($good['sheng'])->toArray() : '';
+        $good['city'] = $this->address->getNmae($good['shi']) ? $this->address->getNmae($good['shi'])->toArray() : '';
+        $good['area'] = $this->address->getNmae($good['qu']) ?$this->address->getNmae($good['qu'])->toArray() :'';
 
-        $categorys = $this->category->list()->toArray();
+        $data = $this->rendorData($good);
+        $categorys = $data['categorys'];
+        $levels = $data['levels'];
+        $commissionLevels = $data['commissionLevels'];
+        $address = $data['address'];
+        $virtualTypes = $data['virtualTypes'];
+        $dispatchs = $data['dispatchs'];
+        $companyies = $data['companyies'];
+        $shopset_level = $data['shopset_level'];
+        //商品规格
+        $options =$objectgood->option()->get()->toArray();
+        $html = $goodService->combinationHtml($options, $levels, $commissionLevels, $good, $specs);
+        return view('admin.good.create', compact('good','categorys', 'levels', 'areas', 'virtualTypes', 'dispatchs', 'companyies', 'params', 'specs', 'commissionLevels' ,'shopset_level','html', 'address'));
+    }
+
+    /**
+     * 新增修改公用数据
+     * Create by szh
+     */
+    public function rendorData($good)
+    {
+        $data['categorys'] = $this->category->list()->toArray();
         //会员等级
         $levels = $this->memberLevel->list()->toArray();
         foreach ($levels as &$val)
@@ -337,7 +380,7 @@ class GoodController extends BaseController
             $val['key'] = 'level' . $val['id'];
         }
         unset($val);
-        $levels = array_merge( [['id' => 0, 'key' => 'default', 'levelname' => '默认会员']], $levels);
+        $data['levels'] = array_merge( [['id' => 0, 'key' => 'default', 'levelname' => '默认会员']], $levels);
 
         //授权等级
         $commissionLevels = $this->commissionLevel->list()->toArray();
@@ -346,24 +389,19 @@ class GoodController extends BaseController
             $val['key'] = 'level' . $val['id'];
         }
         unset($val);
-        $commissionLevels = [['key' => 'default', 'levelname' => '默认等级']];
+        $data['commissionLevels'] = [['key' => 'default', 'levelname' => '默认等级']];
         //获取地址
-        $address = $this->address->expressAddress();
-        $good['province'] = $this->address->getNmae($good['sheng']) ? $this->address->getNmae($good['sheng'])->toArray() : '';
-        $good['city'] = $this->address->getNmae($good['shi']) ? $this->address->getNmae($good['shi'])->toArray() : '';
-        $good['area'] = $this->address->getNmae($good['qu']) ?$this->address->getNmae($good['qu'])->toArray() :'';
+        $data['address'] = $this->address->expressAddress();
+
         $merchid = $good['merchid'] ? $good['merchid'] : 0;
         //获取虚拟商品规格
-        $virtualTypes = $this->virtualType->getList($merchid);
+        $data['virtualTypes'] = $this->virtualType->getList($merchid);
         //运费模板列表
-        $dispatchs =$this->dispatcch->getList($merchid);
+        $data['dispatchs'] =$this->dispatcch->getList($merchid);
         //推荐单位
-        $companyies = $this->company->getList();
-        $shopset_level = 0;
-        //商品规格
-        $options =$objectgood->option()->get()->toArray();
-        $html = $goodService->combinationHtml($options, $levels, $commissionLevels, $good, $specs);
-        return view('admin.good.create', compact('good','categorys', 'levels', 'areas', 'virtualTypes', 'dispatchs', 'companyies', 'params', 'specs', 'commissionLevels' ,'shopset_level','html', 'address'));
+        $data['companyies'] = $this->company->getList();
+        $data['shopset_level'] = 0;
+        return $data;
     }
 
     /**
@@ -409,8 +447,8 @@ class GoodController extends BaseController
     public function store(GoodService $goodService,Request $request)
     {
         $result = $goodService->createData($request);
-        //dd($this->request->all());
-        return Redirect::back()->withInput()->with('mes','操作成功！');
+
+        return \redirect('web/good/'.$result.'/edit');
 
     }
 

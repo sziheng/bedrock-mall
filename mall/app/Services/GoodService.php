@@ -63,6 +63,15 @@ class GoodService
             $goodinfo->title = $request->title;
             $goodinfo->unit = $request->unit;
             $goodinfo->subtitle = $request->subtitle;
+            if ($request->cates) {
+                $goodinfo->pcates = implode(',', $request->cates);
+                $goodinfo->cates = implode(',', $request->cates);
+                $goodinfo->pcate = ($request->cates)[0];
+            } else {
+                $goodinfo->pcates = '';
+                $goodinfo->cates = '';
+                $goodinfo->pcate = '';
+            }
             /**
              * 商品类型 1.实体 2.虚拟商品 3.虚拟物品 10 话费充值
              */
@@ -154,7 +163,7 @@ class GoodService
             var_dump($e);
         }
 
-        return true;
+        return $goodinfo->id;
     }
 
     /**

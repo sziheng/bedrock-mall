@@ -147,7 +147,7 @@
                         </div>
 
                         <div class="x_content">
-                            <form action="/good" method="post" class="form-horizontal" enctype="multipart/form-data" id="goodform">
+                            <form action="/web/good" method="post" class="form-horizontal" enctype="multipart/form-data" id="goodform">
                                 <input type="hidden" name="id" value="{{$good['id']}}">
                                 {{ csrf_field() }}
                                 <input type="hidden"  name="commissionLevelsjs" name="{{json_encode($commissionLevels)}}">
@@ -159,7 +159,7 @@
                                     <li><a href="#c" data-toggle="tab">参数</a></li>
                                     <li><a href="#d" data-toggle="tab">详情</a></li>
                                     <li><a href="#e" data-toggle="tab">购买权限</a></li>
-                                    {{--<li><a href="#f" data-toggle="tab">营销</a></li>--}}
+                                    <li style="display: none"><a href="#f" data-toggle="tab">营销</a></li>
                                     <li><a href="#g" data-toggle="tab">会员折扣</a></li>
                                     <li><a href="#h" data-toggle="tab">分享关注</a></li>
                                     <li><a href="#i" data-toggle="tab">下单通知</a></li>
@@ -174,7 +174,7 @@
                                     <div class="tab-pane" id="c"><div class="panel-body">@include("admin.good.nav.params")</div></div>
                                     <div class="tab-pane" id="d"><div class="panel-body">@include("admin.good.nav.detail")</div></div>
                                     <div class="tab-pane" id="e"><div class="panel-body">@include("admin.good.nav.buy")</div></div>
-                             {{--       <div class="tab-pane" id="f"><div class="panel-body">@include("admin.good.nav.sale")</div></div>--}}
+                                    <div class="tab-pane" id="f"><div class="panel-body">@include("admin.good.nav.sale")</div></div>
                                     <div class="tab-pane" id="g"><div class="panel-body">@include("admin.good.nav.discount")</div></div>
                                     <div class="tab-pane" id="h"><div class="panel-body">@include("admin.good.nav.share")</div></div>
                                     <div class="tab-pane" id="i"><div class="panel-body">@include("admin.good.nav.notice")</div></div>
@@ -331,7 +331,7 @@
                 tags: true,
                 maximumSelectionLength: 10 //最多能够选择的个数
             });
-            if($('input[name=hasoption]').val() == 1){
+            if('{{$good['hasoption']}}'== 1){
                 $('.hasoption').attr('readonly','readonly');
             }
             //实例化富文本
@@ -381,7 +381,7 @@
                             $(".tp_title,.tp_name").each(function(){
                                 var val = $(this).val();
                                 if(!val){
-                                    larer.msg('自定义表单字段名称不能为空');
+                                    layer.msg('自定义表单字段名称不能为空');
                                     check =false;
                                     return false;
                                 }
@@ -391,7 +391,7 @@
 
                             if (diyformtype == 2) {
                                 if(kw == 0) {
-                                   larer.msg('请先添加自定义表单字段再提交');
+                                   layer.msg('请先添加自定义表单字段再提交');
                                     check =false;
                                     return false;
                                 }

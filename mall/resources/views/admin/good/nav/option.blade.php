@@ -57,9 +57,11 @@
         2. 每一种规格代表不同型号，例如颜色为一种规格，尺寸为一种规格，如果设置多规格，手机用户必须每一种规格都选择一个规格项，才能添加购物车或购买。
     </div>
     <div id='specs'>
-        @foreach($specs as $spec)
-            @include('admin.good.tpl.spec')
-        @endforeach
+        @if(is_array($specs))
+            @foreach($specs as $spec)
+                @include('admin.good.tpl.spec')
+            @endforeach
+        @endif
     </div>
     <table class="table">
         <tr>
@@ -69,7 +71,7 @@
             </td>
         </tr>
     </table>
-    <div id="options" style="padding:0;">{!! $html['html'] !!}</div>
+    <div id="options" style="padding:0;">{!! array_get($html, 'html', '' ) !!}</div>
 </div>
 <div id="modal-module-chooestemp" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" style="width:600px;margin:0px auto;">
     <div class="modal-dialog">

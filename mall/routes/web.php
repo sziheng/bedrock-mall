@@ -15,68 +15,71 @@ Route::get('/', function () {
     return '欢迎光临磐荣商城！';
 });
 
-Route::get('/web', '\Bedrock\Http\Controllers\Web\IndexController@getIndex');
+Route::group(['namespace' => 'Web'],function () {
+    Route::get('/web', 'IndexController@getIndex');
 
-//商品分类模块
-Route::get('/category', '\Bedrock\Http\Controllers\Web\CategoryController@index');
+    //商品分类模块
+    Route::get('/web/category', 'CategoryController@index');
 
-//分类添加页面
-Route::get('/category/create', '\Bedrock\Http\Controllers\Web\CategoryController@create');
+    //分类添加页面
+    Route::get('/web/category/create', 'CategoryController@create');
 
-//分类添加操作
-Route::post('/category', '\Bedrock\Http\Controllers\Web\CategoryController@store');
+    //分类添加操作
+    Route::post('/web/category', 'CategoryController@store');
 
-//删除分类
-Route::get('/category/{category}/delete', '\Bedrock\Http\Controllers\Web\CategoryController@delete');
+    //删除分类
+    Route::get('/web/category/{category}/delete', 'CategoryController@delete');
 
-//编辑分类
-Route::get('/category/{category}/edit', '\Bedrock\Http\Controllers\Web\CategoryController@edit');
+    //编辑分类
+    Route::get('/web/category/{category}/edit', 'CategoryController@edit');
 
-//编辑分类操作
-Route::put('/category/{category}', '\Bedrock\Http\Controllers\Web\CategoryController@update');
+    //编辑分类操作
+    Route::put('/web/category/{category}', 'CategoryController@update');
 
-//分类显示/隐藏
-Route::post('/category/{category}/ishome', '\Bedrock\Http\Controllers\Web\CategoryController@ishome');
+    //分类显示/隐藏
+    Route::post('/web/category/{category}/ishome', 'CategoryController@ishome');
 
-//商品模块
-Route::get('/good', '\Bedrock\Http\Controllers\Web\GoodController@index');
+    //商品模块
+    Route::get('/web/good', 'GoodController@index');
 
-//地址联动
-Route::post('/good/chooseAddress', '\Bedrock\Http\Controllers\Web\GoodController@chooseAddress');
+    //地址联动
+    Route::post('/web/good/chooseAddress', 'GoodController@chooseAddress');
 
-//商品上下架
-Route::post('/good/status', '\Bedrock\Http\Controllers\Web\GoodController@changeStatus');
+    //商品上下架
+    Route::post('/web/good/status', 'GoodController@changeStatus');
 
-//商品审核
-Route::post('/good/checked', '\Bedrock\Http\Controllers\Web\GoodController@checked');
+    //商品审核
+    Route::post('/web/good/checked', 'GoodController@checked');
 
-//商品删除
-Route::post('/good/delete', '\Bedrock\Http\Controllers\Web\GoodController@delete');
+    //商品删除
+    Route::post('/web/good/delete', 'GoodController@delete');
 
-//商品彻底删除
-Route::post('/good/physicsDelete', '\Bedrock\Http\Controllers\Web\GoodController@physicsDelete');
+    //商品彻底删除
+    Route::post('/web/good/physicsDelete', 'GoodController@physicsDelete');
 
-//编辑商品
-Route::get('/good/create', '\Bedrock\Http\Controllers\Web\GoodController@create');
+    //编辑商品
+    Route::get('/web/good/create', 'GoodController@create');
 
-//编辑商品
-Route::get('/good/{good}/edit', '\Bedrock\Http\Controllers\Web\GoodController@edit');
+    //编辑商品
+    Route::get('/web/good/{good}/edit', 'GoodController@edit');
 
-//商品模块新增参数
-Route::get('/good/addParams', '\Bedrock\Http\Controllers\Web\GoodController@addParams');
+    //商品模块新增参数
+    Route::get('/web/good/addParams', 'GoodController@addParams');
 
-//商品模块新增/修改操作
-Route::post('/good', '\Bedrock\Http\Controllers\Web\GoodController@store');
+    //商品模块新增/修改操作
+    Route::post('/web/good', 'GoodController@store');
 
+    //会员概述
+    Route::get('/web/member', 'MemberController@index');
+
+});
 //图片上传
-Route::post('/uploadImage', '\Bedrock\Http\Controllers\Web\UploadController@upload');
-
-//订单概述页面
-Route::get('/order', '\Bedrock\Http\Controllers\Web\OrderController@index');
+Route::post('/uploadImage', 'UploadController@upload');
 
 
 
-
+/*//订单概述页面
+Route::get('/order', 'OrderController@index');*/
 /*************订单视图页面****************/
 //订单概述页面
 Route::get('/order', '\Bedrock\Http\Controllers\Web\OrderController@index');

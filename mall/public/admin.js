@@ -13,7 +13,7 @@ $(function(){
         } else {
             ishome = 0
         }
-        $.post("/category/"+id+"/ishome",{ishome:ishome},function(result){
+        $.post("/web/category/"+id+"/ishome",{ishome:ishome},function(result){
             if (result.error){
                 alert(result.msg)
             }else{
@@ -69,7 +69,7 @@ function FillSheng()
     $.ajax({
         //取消异步，也就是必须完成上面才能走下面
         async:false,
-        url:"/good/chooseAddress",
+        url:"/web/good/chooseAddress",
         data:{pcode:pcode},
         type:"POST",
         dataType:"JSON",
@@ -96,7 +96,7 @@ function FillShi()
     $.ajax({
         //取消异步，也就是必须完成上面才能走下面
         async:false,
-        url:"/good/chooseAddress",
+        url:"/web/good/chooseAddress",
         data:{pcode:pcode},
         type:"POST",
         dataType:"JSON",
@@ -127,7 +127,7 @@ function FillQu()
     //根据父级代号查数据
     $.ajax({
         //不需要取消异步
-        url:"/good/chooseAddress",
+        url:"/web/good/chooseAddress",
         data:{pcode:pcode},
         type:"POST",
         dataType:"JSON",

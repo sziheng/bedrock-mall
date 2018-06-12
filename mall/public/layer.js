@@ -35,5 +35,12 @@ $(function(){
         });
     })
 
-
+    var error = $('input[name=errormsg]').val();
+    var success = $('input[name=successmsg]').val();
+    if(error){
+        layer.msg(error);
+    }
+    if(success){
+        layer.msg(success);
+    }
 })

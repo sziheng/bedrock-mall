@@ -6,7 +6,7 @@
         .goodul{list-style:none;float:right;text-align: right:width:80%;padding-right:20px}
         .goodul li{float:left;width:70px};
     </style>
-    <script src="/layer.js"></script>
+
 
     <div class="right_col" role="main">
         <div class="">
@@ -20,7 +20,7 @@
                         </div>
                         <div class="x_content">
 
-                            <form action="/good" method="get" class="form-horizontal form-search" role="form">
+                            <form action="/web/good" method="get" class="form-horizontal form-search" role="form">
                                 <input type="hidden" name="status" value="{{$request->status}}">
                                 <div class="page-toolbar row m-b-sm m-t-sm">
                                     <div class="col-sm-3">
@@ -29,32 +29,32 @@
                                             @if($request->status == 'sale')
                                                 <button class="btn btn-default btn-sm layer" type="button"
                                                         data-content = "确认全部下架？"
-                                                        data-url = "/good/status"
+                                                        data-url = "/web/good/status"
                                                         data-params = "0"
                                                         data-type = "list"><i class='fa fa-circle-o'></i> 下架</button>
                                             @endif
                                             @if($request->status  == 'stock')
                                                 <button class="btn btn-default btn-sm layer" type="button"
                                                         data-content = "确认全部上架？"
-                                                        data-url = "/good/status"
+                                                        data-url = "/web/good/status"
                                                         data-params = "1"
                                                         data-type = "list"><i class='fa fa-circle'></i> 上架</button>
                                             @endif
                                             @if($request->status  == 'cycle')
                                                 <button class="btn btn-default btn-sm layer" type="button"
                                                         data-content = "如果商品存在购买记录，会无法关联到商品, 确认要彻底删除吗？"
-                                                        data-url = "/good/physicsDelete"
+                                                        data-url = "/web/good/physicsDelete"
                                                         data-params = "1"
                                                         data-type ="list"><i class='fa fa-remove'></i> 彻底删除</button>
                                                 <button class="btn btn-default btn-sm layer" type="button"
                                                         data-content = "确认要恢复？"
-                                                        data-url = "/good/delete"
+                                                        data-url = "/web/good/delete"
                                                         data-params = "0"
                                                         data-type ="list"><i class='fa fa-reply'></i> 恢复到仓库</button>
                                             @else
                                                 <button class="btn btn-default btn-sm layer" type="button"
                                                         data-content = "确认要全部删除？"
-                                                        data-url = "/good/delete"
+                                                        data-url = "/web/good/delete"
                                                         data-params = "1"
                                                         data-type ="list"
                                                         ><i class='fa fa-trash'></i> 删除</button>
@@ -66,7 +66,7 @@
                                         <select id="sheng" name='province'  class="input-sm form-control" style='width:90px;display: inline-block' >
 
                                             @if($request->province)
-                                                <option value="{{$provinces[0]->Add_Code}}" selected="true">{{$provinces[0]->Add_Name}}</option>
+                                                <option value="{{array_get($provinces[0],'Add_Code','')}}" selected="true">{{array_get($provinces[0],'Add_Name', '')}}</option>
                                             @else
                                                 <option value="" selected="true">省/直辖市</option>
                                             @endif
@@ -74,7 +74,7 @@
                                         <select id="shi" name='city'   class="input-sm form-control" style='width:90px;display: inline-block' >
                                             @if($request->city)
                                                 @foreach($citys as $city)
-                                                    <option value="{{$city->Add_Code}}" @if($city->Add_Code == $provinces[1]->Add_Code)selected="true" @endif>{{$city->Add_Name}}</option>
+                                                    <option value="{{array_get($city,'Add_Code', '')}}" @if(array_get($city,'Add_Code',0) == array_get($provinces[1],'Add_Code',-1))selected="true" @endif>{{array_get($city,'Add_Name','')}}</option>
                                                 @endforeach
                                             @else
                                                 <option value="" selected="true">请选择</option>
@@ -84,7 +84,7 @@
                                         <select id="qu" name='area'  class="input-sm form-control" style='width:90px;display: inline-block;margin-right: 3px;' >
                                             @if($request->area)
                                                 @foreach($areas as $area)
-                                                    <option value="{{$area->Add_Code}}" @if($area->Add_Code == $provinces[2]->Add_Code) selected="true" @endif>{{$area->Add_Name}}</option>
+                                                    <option value="{{array_get($area,'Add_Code','')}}" @if(array_get($area,'Add_Code',0) == array_get($provinces[2],'Add_Code',-1)) selected="true" @endif>{{array_get($area,'Add_Name','')}}</option>
                                                 @endforeach
                                             @else
                                                 <option value="" selected="true">请选择</option>
@@ -108,7 +108,7 @@
                                     </div>
                                 </div>
                             </form>
-
+                            @if(isset($goods) && ($goods->toArray())['total'])
                             <div class="table-responsive">
                                 <table class="table table-striped jambo_table bulk_action">
                                     <thead>
@@ -161,7 +161,7 @@
                                                 @if($request->status!='cycle')
                                                     <span class='btn  btn-sm layer  @if($good->status==1) btn-primary @else btn-default @endif'
                                                     data-content = "确认是@if($good->status==1)下架 @else 上架 @endif？"
-                                                    data-url = "/good/status"
+                                                    data-url = "/web/good/status"
                                                     data-params = "@if($good->status==1)0 @else 1 @endif"
                                                     data-type ="one"
                                                     data-id = "{{$good->id}}"
@@ -169,7 +169,7 @@
                                                     @if($good->status==1)上架 @else 下架@endif</span>
                                                     <span class='btn  btn-sm layer @if($good->checked==0) btn-primary @else btn-default @endif'
                                                     data-content = "确认是@if($good->checked==0) 审核中 @else 审核通过 @endif？"
-                                                    data-url = "/good/checked"
+                                                    data-url = "/web/good/checked"
                                                     data-params = "@if($good->checked==0)1 @else 0 @endif"
                                                     data-type ="one"
                                                     data-id = "{{$good->id}}"
@@ -184,24 +184,24 @@
                                             @endif
 
                                             <td class=" last" style="vertical-align:middle">
-                                                <a  class='btn btn-default btn-sm' href="/good/{{$good->id}}/edit" ><i class='fa fa-edit'></i> 编辑</a>
+                                                <a  class='btn btn-default btn-sm' href="/web/good/{{$good->id}}/edit" ><i class='fa fa-edit'></i> 编辑</a>
                                                 @if($request->status=='cycle')
                                                 <a  class='btn btn-default btn-sm layer'
                                                     data-content = "确认要恢复？"
-                                                    data-url = "/good/delete"
+                                                    data-url = "/web/good/delete"
                                                     data-params = "0"
                                                     data-type ="one"
                                                     data-id = "{{$good->id}}"><i class='fa fa-reply'></i> 恢复到仓库</a>
                                                 <a  class='btn btn-default btn-sm layer'
                                                     data-content = "如果商品存在购买记录，会无法关联到商品, 确认要彻底删除吗？"
-                                                    data-url = "/good/physicsDelete"
+                                                    data-url = "/web/good/physicsDelete"
                                                     data-params = "1"
                                                     data-type ="one"
                                                     data-id = "{{$good->id}}"></i> 彻底删除</a>
                                                 @else
                                                 <a  class='btn btn-default btn-sm layer'
                                                     data-content = "确认是删除？"
-                                                    data-url = "/good/delete"
+                                                    data-url = "/web/good/delete"
                                                     data-params = "1"
                                                     data-type ="one"
                                                     data-id = "{{$good->id}}">
@@ -214,7 +214,7 @@
                                         <tr>
                                             <td colspan="4" style="text-align: left;border-top:none;padding:5px 0;">
                                                 @if($good->merchid >0)
-                                                    @if($good->merchUser->merchname)
+                                                    @if(object_get($good->merchUser,'merchname',''))
                                                         <span class="text-default" style="margin-left: 190px;">商户名称:</span><span class="text-info">{{$good->merchUser->merchname}}</span>
                                                     @endif
                                                 @endif
@@ -236,7 +236,17 @@
                                 </table>
                             </div>
                             {{ $goods->links() }}
+                            @else
+                                <div class="table-responsive">
+                                    <div style="height:200px">
+                                        <div style="line-height:200px;width:200px;margin:0 auto">
+                                            暂无数据
+                                        </div>
 
+                                    </div>
+
+                                </div>
+                            @endif
                         </div>
                     </div>
                 </div>
