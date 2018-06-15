@@ -16,6 +16,7 @@
                     <div class="x_panel">
                         <div class="x_title">
                             <h2>商品管理 <small>商品列表</small></h2>
+                            <a href="/web/good/create" class="btn btn-primary" type="button" style="float:right">添加商品</a>
                             <div class="clearfix"></div>
                         </div>
                         <div class="x_content">

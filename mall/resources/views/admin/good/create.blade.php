@@ -142,7 +142,7 @@
                     <div class="x_panel">
                         <div class="x_title">
                             <h2>商品管理 <small>商品添加</small></h2>
-
+                            <a  style="float:right" href="/web/good?status=sale" class="btn btn-primary" type="button" style="float:right">商品列表</a>
                             <div class="clearfix"></div>
                         </div>
 
@@ -162,11 +162,6 @@
                                     <li style="display: none"><a href="#f" data-toggle="tab">营销</a></li>
                                     <li><a href="#g" data-toggle="tab">会员折扣</a></li>
                                     <li><a href="#h" data-toggle="tab">分享关注</a></li>
-                                    <li><a href="#i" data-toggle="tab">下单通知</a></li>
-                                    {{--<li><a href="#j" data-toggle="tab">分销</a></li>
-                                    <li><a href="#k" data-toggle="tab">线下核销</a></li>--}}
-                                    <li><a href="#l" data-toggle="tab">自定义表单</a></li>
-                                {{--    <li><a href="#m" data-toggle="tab">店铺信息</a></li>--}}
                                 </ul>
                                 <div class="tab-content">
                                     <div class="tab-pane active" id="a"><div class="panel-body">@include("admin.good.nav.basic")</div></div>
@@ -177,17 +172,10 @@
                                     <div class="tab-pane" id="f"><div class="panel-body">@include("admin.good.nav.sale")</div></div>
                                     <div class="tab-pane" id="g"><div class="panel-body">@include("admin.good.nav.discount")</div></div>
                                     <div class="tab-pane" id="h"><div class="panel-body">@include("admin.good.nav.share")</div></div>
-                                    <div class="tab-pane" id="i"><div class="panel-body">@include("admin.good.nav.notice")</div></div>
-                                    <div class="tab-pane" id="l"><div class="panel-body">@include("admin.good.nav.diyform")</div></div>
-                                   {{--
-                                    <div class="tab-pane" id="j">@include("admin.good.nav.sell")</div>
-                                    <div class="tab-pane" id="k">@include("admin.good.nav.verify")</div>
-                                    <div class="tab-pane" id="m">@include("admin.good.nav.merch")</div>--}}
                                 </div>
                             </div>
-                            <div class='panel-body' style='position:fixed;bottom:0;width:1000px; text-align: right; '>
+                            <div class='panel-body submit' style='display:none;position:fixed;bottom:0;width:1000px; text-align: right;'>
                                 <input type="submit"  value="保存商品" class="btn btn-primary"/>
-
                             </div>
                             </div>
                             </form>
@@ -199,23 +187,18 @@
         </div>
     </div>
     <script>
-        window.type = "{$item['type']}";
-        window.virtual = "{$item['virtual']}";
-
-
         $(function(){
+            $('.submit').css('display','block');
             //下拉框
             $('.select2').select2({
                 placeholder: "请选择所属选项",
                 allowClear: true
             })
-            require(['bootstrap'], function () {
                 $('#myTab a').click(function (e) {
                     $('#tab').val( $(this).attr('href'));
                     e.preventDefault();
                     $(this).tab('show');
                 })
-            });
             $(':radio[name=isverify]').click(function () {
                 window.type = $("input[name='isverify']:checked").val();
 
@@ -227,56 +210,7 @@
                 }
             })
 
-            $(':radio[name=type]').click(function () {
-                window.type = $("input[name='type']:checked").val();
-                window.virtual = $("#virtual").val();
-                if(window.type=='1'){
-                    $('.dispatch_info').show();
-                } else {
-                    $('.dispatch_info').hide();
-                }
-                if (window.type == '2') {
-                    $('.send-group').show();
-                } else {
-                    $('.send-group').hide();
-                }
-                if (window.type == '3') {
-                    if ($('#virtual').val() == '0') {
-                        $('.choosetemp').show();
-                    }
-                }
-            })
-
-            $(":checkbox[name='buyshow']").click(function () {
-                if ($(this).prop('checked')) {
-                    $(".bcontent").show();
-                }
-                else {
-                    $(".bcontent").hide();
-                }
-            })
-
-            $(':radio[name=buyshow]').click(function () {
-                window.buyshow = $("input[name='buyshow']:checked").val();
-
-                if(window.buyshow=='1'){
-                    $('.bcontent').show();
-                } else {
-                    $('.bcontent').hide();
-                }
-            })
-
-            $("#chkoption").click(function() {
-                var obj = $(this);
-                if (obj.get(0).checked) {
-                    $("#tboption").show();
-                    $(".trp").hide();
-                }
-                else {
-                    $("#tboption").hide();
-                    $(".trp").show();
-                }
-            });
+            //地址联动begin
             $('.province').mouseover(function(){
                 $(this).find('ul').show();
             }).mouseout(function(){
@@ -315,22 +249,13 @@
                     cityall.next().html("");
                 }
             });
+            //地址联动end
             //标签选择
-            $("#chkoption").click(function() {
-                var obj = $(this);
-                if (obj.get(0).checked) {
-                    $("#tboption").show();
-                    $(".trp").hide();
-                }
-                else {
-                    $("#tboption").hide();
-                    $(".trp").show();
-                }
-            });
             $("#sel_menu2").select2({
                 tags: true,
                 maximumSelectionLength: 10 //最多能够选择的个数
             });
+            //规格页面 如是多规格其他输入框变为只读
             if('{{$good['hasoption']}}'== 1){
                 $('.hasoption').attr('readonly','readonly');
             }
@@ -338,7 +263,7 @@
             var ue = UE.getEditor('container', {
 
             });
-
+            //详情页面可读时展示
             $('input[name=buyshow]').click(function(){
                 var ue = UE.getEditor('buycontainer', {
 
@@ -373,31 +298,9 @@
                 }
             });
 
-            require(['vaildate'], function () {
-                $(function(){
                     $("form").validate({
                         submitHandler:function(form){
                             var check = true;
-                            $(".tp_title,.tp_name").each(function(){
-                                var val = $(this).val();
-                                if(!val){
-                                    layer.msg('自定义表单字段名称不能为空');
-                                    check =false;
-                                    return false;
-                                }
-                            });
-
-                            var diyformtype = $(':radio[name=diyformtype]:checked').val();
-
-                            if (diyformtype == 2) {
-                                if(kw == 0) {
-                                   layer.msg('请先添加自定义表单字段再提交');
-                                    check =false;
-                                    return false;
-                                }
-                            }
-
-                            if(!check){return false;}
 
                             window.type = $("input[name='type']:checked").val();
                             window.virtual = $("#virtual").val();
@@ -411,47 +314,6 @@
                             })
                             if (inum == 0) {
                                 layer.msg('请上传商品图片');
-                                return false;
-                            }
-
-
-                            var full = true;
-                            if (window.type == '3') {
-                                if (window.virtual != '0') {  //如果单规格，不能有规格
-                                    if ($('#hasoption').get(0).checked) {
-                                        layer.msg('您的商品类型为：虚拟物品(卡密)的单规格形式，需要关闭商品规格！');
-                                        return false;
-                                    }
-                                }
-                                else {
-
-                                    var has = false;
-                                    $('.spec_item_virtual').each(function () {
-                                        has = true;
-                                        if ($(this).val() == '' || $(this).val() == '0') {
-                                            layer.msg('请选择虚拟物品模板');
-                                            full = false;
-                                            return false;
-                                        }
-                                    });
-                                    if (!has) {
-                                        layer.msg('您的商品类型为：虚拟物品(卡密)的多规格形式，请添加规格！');
-                                        return false;
-                                    }
-                                }
-                            }
-                            else if(window.type=='10'){
-                                var spec_itemlen = $(".spec_item").length;
-                                if (!$('#hasoption').get(0).checked || spec_itemlen<1) {
-                                    layer.msg('您的商品类型为：话费流量充值，需要开启并设置商品规格！');
-                                    return false;
-                                }
-                                if(spec_itemlen>1){
-                                    layer.msg('您的商品类型为：话费流量充值，只可添加一个规格！');
-                                    return false;
-                                }
-                            }
-                            if (!full) {
                                 return false;
                             }
 
@@ -483,8 +345,6 @@
 
                         }
                     });
-                })
-            });
 
         })
 

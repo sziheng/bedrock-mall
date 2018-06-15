@@ -108,7 +108,7 @@
 
 
 <script src="/js/require.js"></script>
-
+<script src="/js/require.config.js"></script>
 <script src="/ueditor/ueditor.config.js"></script>
 <script src="/ueditor/ueditor.all.js"></script>
 <script src="/admin.js"></script>

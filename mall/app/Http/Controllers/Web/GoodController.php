@@ -83,7 +83,7 @@ class GoodController extends BaseController
         $cate = intval($request->cate);
         $keyword = trim($request->keyword);
         $sql = $this->good::leftJoin('ims_weshop_merch_user', function ($join) {
-            $join->on('ims_weshop_merch_user.id', '=','ims_weshop_goods.merchid')->orOn('ims_weshop_merch_user.uniacid','=','ims_weshop_goods.uniacid');
+            $join->on('ims_weshop_merch_user.id', '=','ims_weshop_goods.merchid')->on('ims_weshop_merch_user.uniacid','=','ims_weshop_goods.uniacid');
         })
             ->leftJoin('ims_weshop_goods_option as op', function ($join) {
                 $join->on('ims_weshop_goods.id', '=','op.goodsid');

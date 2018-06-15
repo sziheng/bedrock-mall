@@ -23,60 +23,7 @@
         <input type="text" name="subtitle" id="subtitle" class="form-control" value="{{$good['subtitle']}}" data-parent=".subtitle" />
     </div>
 </div>
-
-<div class="form-group">
-    <label class="col-sm-2 control-label">商品类型</label>
-    <div class="col-sm-9 col-xs-12">
-        <input type="hidden" name="goodstype" value="{{$good['type']}}">
-
-
-        <label class="radio-inline"><input type="radio" name="type" value="1"  @if($good) disabled @endif @if($good['type'] <= 1)checked="true" @endif onclick="$('#product').show();$('#type_virtual').hide()" /> 实体商品</label>
-        <label class="radio-inline"><input type="radio" name="type" value="2" @if($good) disabled @endif @if($good['type']  == 2)checked="true" @endif  onclick="$('#product').hide();$('#type_virtual').hide()" /> 虚拟商品</label>
-
-        <label class="radio-inline"><input type="radio" name="type" value="3" @if($good) disabled @endif @if($good['type']  == 3)checked="true" @endif  onclick="$('#type_virtual').show();" /> 虚拟物品(卡密)</label>
-
-        <label class="radio-inline"><input type="radio" name="type" value="10" @if($good) disabled @endif @if($good['type']  == 10)checked="true" @endif  onclick="$('#type_virtual').hide();$('#product').hide();" /> 话费流量充值</label>
-
-
-        <span class="help-block">商品类型，商品保存后无法修改，请谨慎选择</span>
-
-    </div>
-</div>
-
-
-<div class="form-group send-group" style="@if(object_get($good,'type','0') != 2)display: none;@endif">
-    <label class="col-sm-2 control-label">自动发货</label>
-    <div class="col-sm-9 col-xs-12">
-        <label class="radio-inline"><input type="radio" name="virtualsend" value="0"  @if(!$good['virtualsend'])checked="true" @endif/> 否</label>
-        <label class="radio-inline"><input type="radio" name="virtualsend" value="1" @if($good['virtualsend']==1)checked="true" @endif   /> 是</label>
-        <span class="help-block">提示：发货后订单自动完成</span>
-    </div>
-</div>
-
-<div class="form-group send-group" style="@if(object_get($good,'type','0') != 2)display: none;@endif{/if}">
-    <label class="col-sm-2 control-label">自动发货内容</label>
-    <div class="col-sm-9 col-xs-12">
-        <textarea class="form-control" name="virtualsendcontent">{{$good['virtualsendcontent']}}</textarea>
-    </div>
-</div>
-
-
-<div class="form-group" style="@if(object_get($good,'type','0') != 3)display: none;@endif" id="type_virtual" {if !empty($good['id'])}disabled{/if}>
-<label class="col-sm-2 control-label"></label>
-<div class="col-sm-6 col-xs-6">
-
-
-    <select class="form-control select2" id="virtual" name="virtual">
-        <option value="0">多规格虚拟物品</option>
-        @if(is_array($virtualTypes))
-        @foreach($virtualTypes as $virtualType)
-        <option value="{{$virtualType['id']}}" @if($good['virtual'] == $virtualType['id'])selected="true"@endif>{{$virtualType['usedata']}}/{{$virtualType['alldata']}}| {{$virtualType['title']}}</option>
-        @endforeach
-        @endif
-    </select>
-    <span>提示：直接选中虚拟物品模板即可，选择多规格需在商品规格页面设置</span>
-</div>
-</div>
+<input type="hidden" name="type" value="1">
 
 <div class="form-group splitter"></div>
 <div class="form-group">
@@ -263,6 +210,23 @@
     </div>
 </div>
 <div class="form-group">
+    <label class="col-sm-2 control-label">通知方式</label>
+    <div class="col-sm-9 col-xs-12">
+
+        <label class="checkbox-inline">
+            <input type="checkbox" value="0" name='noticetype[]' @if(is_array($good['noticetype']))@if(in_array('0',$good['noticetype']))checked @endif @endif /> 下单通知
+        </label>
+        <label class="checkbox-inline">
+            <input type="checkbox" value="1" name='noticetype[]' @if(is_array($good['noticetype']))@if(in_array('1',$good['noticetype']))checked @endif @endif  /> 付款通知
+        </label>
+        <label class="checkbox-inline">
+            <input type="checkbox" value="2" name='noticetype[]' @if(is_array($good['noticetype']))@if(in_array('2',$good['noticetype']))checked @endif @endif  /> 买家收货通知
+        </label>
+        <div class="help-block">通知商家方式</div>
+
+    </div>
+</div>
+<div class="form-group">
     <label class="col-sm-2 control-label">上架</label>
     <div class="col-sm-9 col-xs-12">
 
@@ -281,17 +245,5 @@
         <!--<span class="help-block"></span>-->
     </div>
 </div>
-<!-- end -->
-
-<div class="form-group" style="display: none;">
-    <label class="col-sm-2 control-label">是否支持拼团</label>
-    <div class="col-sm-9 col-xs-12">
-        <label>
-            <input type="checkbox" class="js-switch" @if($good['groupstype'] == 1) checked @endif name="groupstype" />
-        </label>
-        <span class="help-block"></span>
-    </div>
-</div>
-
 
 

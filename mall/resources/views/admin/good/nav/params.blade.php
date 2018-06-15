@@ -36,32 +36,8 @@
 
 <script language="javascript">
     $(function() {
-        requirejs.config({
-            shim: {
-                'vaildate' : ['jquery'],
-                'jquery.ui': ['jquery'],
-                'util' : ['jquery'],
-                'fileUploader' : ['jquery'],
-                'bootstrap' : ['jquery']
-            },
-            paths : {
-                'jquery' : '/vendors/jquery/dist/jquery.min',
-                'vaildate' : '/js/jquery.validate.min',
-                'jquery.ui' : '/js/jquery-ui-1.10.3.min',
-                'bootstrap' : '/vendors/bootstrap/dist/js/bootstrap.min',
-                'util' : '/upload/util',
-                'fileUploader' : '/upload/fileUploader'
-            }
-        });
-/*        require(['vaildate'], function () {
-            $('#goodform').vaildate({
-                submitHandler:function(form){
-                    alert(1);
-                    return false
-                }
-            })
-        });*/
-        require(['jquery.ui'],function(){
+
+        require(['jquery.ui','bootstrap','vaildate'],function(){
             $("#param-items").sortable();
         });
         $("#chkoption").click(function() {
@@ -77,7 +53,7 @@
         });
     })
     function addParam() {
-        var url = "/good/addParams?tpl=param";
+        var url = "/web/good/addParams?tpl=param";
         $.ajax({
             "url": url,
             success: function(data) {

@@ -14,4 +14,24 @@ class Member extends Model
         return $this->where('uniacid', '=', UNIACID)->orderBy('level', 'desc')->get();
     }
 
+
+    /**
+     * Create by szh
+     * @param int $day
+     * @return bool
+     */
+    public function getappendMemberByTime($day = 0)
+    {
+        $range =strtotime(\Carbon\Carbon::now()->subDays($day));
+        $range = strtotime(date('Y/m/d',$range));
+        $result = self::where('createtime', '>=', $range)
+            ->get([
+                \DB::raw('COUNT(*) as count')
+            ]);
+        if (isset($result)) {
+            $result = $result->toArray();
+        }
+        return $result;
+    }
+
 }

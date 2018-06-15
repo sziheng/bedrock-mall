@@ -72,6 +72,12 @@ Route::group(['namespace' => 'Web'],function () {
     //会员概述
     Route::get('/web/member', 'MemberController@index');
 
+    //会员概述页信息
+    Route::get('/web/member/getMemberInfos', 'MemberController@getMemberInfos');
+
+    //会员列表
+    Route::get('/web/member/getList', 'MemberController@getList');
+
 });
 //图片上传
 Route::post('/uploadImage', 'UploadController@upload');
