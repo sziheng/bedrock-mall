@@ -107,6 +107,7 @@
 <script src="/build/js/custom.min.js"></script>
 
 
+
 <script src="/js/require.js"></script>
 <script src="/js/require.config.js"></script>
 <script src="/ueditor/ueditor.config.js"></script>
@@ -115,4 +116,10 @@
 
 //弹窗
 <script src="/layer.js"></script>
+
+
+<script src="/js/require.js"></script>
+<script src="/ueditor/ueditor.config.js"></script>
+<script src="/ueditor/ueditor.all.js"></script>
+<script src="/admin.js"></script>
 

@@ -710,11 +710,13 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
 }
 
 .btn-primary.btn-outline {
-    color: #ce8e54;
+    color: #2e6da4;
+
 }
 
 .btn-success.btn-outline {
-    color: #ce8e54;
+    color: #2e6da4;
+
 }
 
 .btn-info.btn-outline {
@@ -722,11 +724,13 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
 }
 
 .btn-warning.btn-outline {
-    color: #f8ac59;
+    color: #2e6da4;
+
 }
 
 .btn-danger.btn-outline {
-    color: #ed5565;
+    color: #2e6da4;
+
 }
 
 .btn-primary.btn-outline:hover,
@@ -738,9 +742,9 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
 }
 
 .btn-primary {
-    background-color: #ce8e54;
-    border-color: #ce8e54;
-    color: #FFFFFF;
+    color: #fff;
+    background-color: #337ab7;
+    border-color: #2e6da4;
 }
 
 .btn-primary:hover,
@@ -748,9 +752,9 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
 .btn-primary:active,
 .btn-primary.active,
 .open .dropdown-toggle.btn-primary {
-    background-color: #ac794c;
-    border-color: #ac794c;
-    color: #FFFFFF;
+    color: #fff;
+    background-color: #337ab7;
+    border-color: #2e6da4;
 }
 
 .btn-primary:active,
@@ -774,14 +778,14 @@ fieldset[disabled] .btn-primary:hover,
 fieldset[disabled] .btn-primary:focus,
 fieldset[disabled] .btn-primary:active,
 fieldset[disabled] .btn-primary.active {
-    background-color: #ce8e54;
-    border-color: #ce8e54;
+    background-color: #337ab7;
+    border-color: #2e6da4;
 }
 
 .btn-success {
-    background-color: #ce8e54;
-    border-color: #ce8e54;
-    color: #FFFFFF;
+    color: #fff;
+    background-color: #337ab7;
+    border-color: #2e6da4;
 }
 
 .btn-success:hover,
@@ -789,9 +793,9 @@ fieldset[disabled] .btn-primary.active {
 .btn-success:active,
 .btn-success.active,
 .open .dropdown-toggle.btn-success {
-    background-color: #ac794c;
-    border-color: #ac794c;
-    color: #FFFFFF;
+    color: #fff;
+    background-color: #337ab7;
+    border-color: #2e6da4;
 }
 
 .btn-success:active,
@@ -843,7 +847,7 @@ fieldset[disabled] .btn-success.active {
 .open>.dropdown-toggle.btn-success.focus,
 .open>.dropdown-toggle.btn-success:focus,
 .open>.dropdown-toggle.btn-success:hover{
-    background-color: #ac794c;
+    background-color: #337ab7;
 }
 .btn-info:active,
 .btn-info.active,
