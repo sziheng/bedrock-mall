@@ -59,6 +59,17 @@ class Good extends Model
         return $this->hasMany('Bedrock\Models\Param', 'goodsid')->orderBy('displayorder', 'asc');
     }
 
+
+    /**
+     * 获取商品规格
+     * Create by szh
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function option()
+    {
+        return $this->hasMany('Bedrock\Models\Option', 'goodsid')->orderBy('id', 'asc');
+    }
+
     /**
      * 获取商品规格
      * Create by szh

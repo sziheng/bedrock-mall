@@ -3,7 +3,7 @@
 namespace Bedrock\Http\Controllers\Web;
 
 use Bedrock\Http\Controllers\Controller;
-
+use Illuminate\Support\Facades\Redirect;
 /**
  * Class BaseController
  *

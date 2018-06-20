@@ -39,10 +39,12 @@
     <sctipt src="{{ URL::asset('/') }}vendors/jquery/dist/jquery.min.js"></sctipt>
     <script src="/vendors/jquery/dist/jquery.min.js"></script>
     <script src="/upload/upload.js"></script>
-
     <script src="/layer/layer.js"></script>
-    {{--<script src="/vendors/echarts/dist/echarts.common.js"></script>--}}
+
+    <script src="/js/jquery.validate.min.js"></script>
+
     <script src="/echarts/echarts-all.js"></script>
+
 </head>
 
 <body class="nav-md">
@@ -60,7 +62,7 @@
 </div>
 @include('admin.layout.footer')
 <!-- jQuery -->
-
+@include('admin.layout.message')
 </body>
 </html>
 
@@ -103,12 +105,21 @@
 <script src="/vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
 <!-- Custom Theme Scripts -->
 <script src="/build/js/custom.min.js"></script>
-<<<<<<< HEAD
+
+
 
 <script src="/js/require.js"></script>
-
+<script src="/js/require.config.js"></script>
 <script src="/ueditor/ueditor.config.js"></script>
 <script src="/ueditor/ueditor.all.js"></script>
 <script src="/admin.js"></script>
-=======
->>>>>>> dd0654e5d292875ae94dc90739d95e6d7fee7859
+
+//弹窗
+<script src="/layer.js"></script>
+
+
+<script src="/js/require.js"></script>
+<script src="/ueditor/ueditor.config.js"></script>
+<script src="/ueditor/ueditor.all.js"></script>
+<script src="/admin.js"></script>
+

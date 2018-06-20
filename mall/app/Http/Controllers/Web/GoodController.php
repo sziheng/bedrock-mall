@@ -10,7 +10,11 @@ use Bedrock\Models\VirtualType;
 use Bedrock\Models\Dispatch;
 use Bedrock\Models\Company;
 use Bedrock\Models\SpecItem;
+use Bedrock\Models\Option;
+use Bedrock\Models\CommissionLevel;
+use Bedrock\Services\GoodService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\DB;
 use Bedrock\Http\Controllers\Controller;
 
@@ -27,6 +31,8 @@ class GoodController extends BaseController
     protected $dispatcch;
     protected $company;
     protected $specitem;
+    protected $commissionLevel;
+    protected $option;
 
     /**
      * GoodController constructor.
@@ -46,17 +52,21 @@ class GoodController extends BaseController
         Request $request,
         Dispatch $dispatch,
         Company $company,
-        SpecItem $specitem
+        SpecItem $specitem,
+        CommissionLevel $commissionLevel,
+        Option $option
     ){
-        $this->good          = $good;
-        $this->category      = $category;
-        $this->address       = $address;
-        $this->memberLevel   = $memberLevel;
-        $this->virtualType   = $virtualType;
-        $this->request       = $request;
-        $this->dispatcch     = $dispatch;
-        $this->company       = $company;
-        $this->specitem      = $specitem;
+        $this->good            = $good;
+        $this->category        = $category;
+        $this->address         = $address;
+        $this->memberLevel     = $memberLevel;
+        $this->virtualType     = $virtualType;
+        $this->request         = $request;
+        $this->dispatcch       = $dispatch;
+        $this->company         = $company;
+        $this->specitem        = $specitem;
+        $this->commissionLevel = $commissionLevel;
+        $this->option          = $option;
         parent::__construct();
     }
 
@@ -69,12 +79,11 @@ class GoodController extends BaseController
         //todo 建议所有从 $request 对象中获取参数统一化，
         //todo 不要在控制器中书写 SQL ，该方法太长了，所有方法一律不得超过 50 行
         //todo 这么复杂的逻辑难道不应该放入 Services 中吗？
-
         $condition = $request->status;
         $cate = intval($request->cate);
         $keyword = trim($request->keyword);
         $sql = $this->good::leftJoin('ims_weshop_merch_user', function ($join) {
-            $join->on('ims_weshop_merch_user.id', '=','ims_weshop_goods.merchid')->orOn('ims_weshop_merch_user.uniacid','=','ims_weshop_goods.uniacid');
+            $join->on('ims_weshop_merch_user.id', '=','ims_weshop_goods.merchid')->on('ims_weshop_merch_user.uniacid','=','ims_weshop_goods.uniacid');
         })
             ->leftJoin('ims_weshop_goods_option as op', function ($join) {
                 $join->on('ims_weshop_goods.id', '=','op.goodsid');
@@ -85,6 +94,7 @@ class GoodController extends BaseController
             $address=array(0=>$request->province, 1=>$request->city, 2=>$request->area);
             $provinces =  $data = $this->address->select('Add_Code','Add_Name')->whereIn('Add_Code', $address)->get();
             $provinces = $provinces->toArray();
+            //dd($provinces);
             $citys =  $data = $this->address->select('Add_Code','Add_Name')->where('Add_Parent', '=', $request->province)->get();
             $areas =  $data = $this->address->select('Add_Code','Add_Name')->where('Add_Parent', '=', $request->city)->get();
             $sql = $sql
@@ -271,15 +281,45 @@ class GoodController extends BaseController
         }
     }
 
-
+    /**
+     * 商品新增页面
+     * Create by szh
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function create()
+    {
+        //暂时这么处理 下礼拜找解决方法
+        $goods= Good::limit(1)->get()->toArray();
+        foreach($goods[0] as $key => &$val){
+            $good[$key] = '';
+        }
+        $discounts = ['type' => ''];
+        $good['discounts'] = $discounts;
+        $good['piclist'] = [];
+        $good['category'] = [];
+        $data = $this->rendorData($good);
+        $categorys = $data['categorys'];
+        $levels = $data['levels'];
+        $commissionLevels = $data['commissionLevels'];
+        $address = $data['address'];
+        $virtualTypes = $data['virtualTypes'];
+        $dispatchs = $data['dispatchs'];
+        $companyies = $data['companyies'];
+        $shopset_level = $data['shopset_level'];
+        $specs = [];
+        $html['html'] = '';
+        $params = [];
+        return view('admin.good.create', compact('good','categorys', 'levels', 'areas', 'virtualTypes', 'dispatchs', 'companyies', 'params', 'specs', 'commissionLevels' ,'shopset_level','html', 'address', 'discounts'));
+    }
     /**
      * Create by szh
      * @param Good $good
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function edit(Good $good)
+    public function edit(Good $good, GoodService $goodService)
     {
         //获取商品参数
+        $objectgood = $good;
         $params = $good->param()->get()->toArray();
         //商品规格
         $specs = $good->spec()->get();
@@ -297,33 +337,71 @@ class GoodController extends BaseController
         $specs = $specs->toArray();
         $good = $good->toArray();
         $good['noticetype'] = explode(',', $good['noticetype']);
-        $good['discounts'] = json_decode($good['discounts'], true);
-        if ($this->good['thumb'])
-        {
-            $this->good['piclist'] = array_merge([$good['thumb']],iunserializer($good['thumb_url']));
+        if ($good['cates']) {
+            $good['category'] = is_array(explode(',', $good['cates'])) ? explode(',', $good['cates']) : [];
+        } else {
+            $good['category'] = [];
         }
-        $categorys = $this->category->list()->toArray();
-        $levels = $this->memberLevel->list()->toArray();
+        $good['discounts'] = json_decode($good['discounts'], true);
+        if ($good['thumb'])
+        {
+            $good['piclist'] = array_merge([$good['thumb']],iunserializer($good['thumb_url']));
+        }
+        $good['province'] = $this->address->getNmae($good['sheng']) ? $this->address->getNmae($good['sheng'])->toArray() : '';
+        $good['city'] = $this->address->getNmae($good['shi']) ? $this->address->getNmae($good['shi'])->toArray() : '';
+        $good['area'] = $this->address->getNmae($good['qu']) ?$this->address->getNmae($good['qu'])->toArray() :'';
+
+        $data = $this->rendorData($good);
+        $categorys = $data['categorys'];
+        $levels = $data['levels'];
+        $commissionLevels = $data['commissionLevels'];
+        $address = $data['address'];
+        $virtualTypes = $data['virtualTypes'];
+        $dispatchs = $data['dispatchs'];
+        $companyies = $data['companyies'];
+        $shopset_level = $data['shopset_level'];
+        //商品规格
+        $options =$objectgood->option()->get()->toArray();
+        $html = $goodService->combinationHtml($options, $levels, $commissionLevels, $good, $specs);
+        return view('admin.good.create', compact('good','categorys', 'levels', 'areas', 'virtualTypes', 'dispatchs', 'companyies', 'params', 'specs', 'commissionLevels' ,'shopset_level','html', 'address'));
+    }
+
+    /**
+     * 新增修改公用数据
+     * Create by szh
+     */
+    public function rendorData($good)
+    {
+        $data['categorys'] = $this->category->list()->toArray();
         //会员等级
+        $levels = $this->memberLevel->list()->toArray();
         foreach ($levels as &$val)
         {
             $val['key'] = 'level' . $val['id'];
         }
         unset($val);
-        $levels = array_merge( [['id' => 0, 'key' => 'default', 'levelname' => '默认会员']], $levels);
+        $data['levels'] = array_merge( [['id' => 0, 'key' => 'default', 'levelname' => '默认会员']], $levels);
+
+        //授权等级
+        $commissionLevels = $this->commissionLevel->list()->toArray();
+        foreach ($commissionLevels as &$val)
+        {
+            $val['key'] = 'level' . $val['id'];
+        }
+        unset($val);
+        $data['commissionLevels'] = [['key' => 'default', 'levelname' => '默认等级']];
         //获取地址
-        $this->address->expressAddress();
-        $good['province'] = $this->address->getNmae($good['sheng']);
-        $good['city'] = $this->address->getNmae($good['shi']);
-        $good['area'] = $this->address->getNmae($good['qu']);
+        $data['address'] = $this->address->expressAddress();
+
         $merchid = $good['merchid'] ? $good['merchid'] : 0;
         //获取虚拟商品规格
-        $virtualTypes = $this->virtualType->getList($merchid);
+        $data['virtualTypes'] = $this->virtualType->getList($merchid);
         //运费模板列表
-        $dispatchs =$this->dispatcch->getList($merchid);
+        $data['dispatchs'] =$this->dispatcch->getList($merchid);
         //推荐单位
-        $companyies = $this->company->getList();
-        return view('admin.good.create', compact('good','categorys', 'levels', 'areas', 'virtualTypes', 'dispatchs', 'companyies', 'params', 'specs'));
+        $data['companyies'] = $this->company->getList();
+        $data['shopset_level'] = 0;
+        return $data;
     }
 
     /**
@@ -335,23 +413,25 @@ class GoodController extends BaseController
      */
     public function addParams(Request $request)
     {
-
         switch ($this->request->tpl) {
             case 'option':
-                /*  include $this->template('goods/tpl/option');
 
-                  break;*/
-                return view('admin.good.tpl.option');
+                return view('admin.good.tpl.spec');
                 break;
             case 'spec':
-                /*   $spec = array('id' => random(32), 'title' => $_GPC['title']);
-                   include $this->template('goods/tpl/spec');*/
+                $spec =['id' => random(32), 'title' => '', 'items' => []];
+                return view('admin.good.tpl.spec',compact('spec'));
                 break;
 
             case 'specitem':
-                /* $spec = array('id' => $_GPC['specid']);
-                 $specitem = array('id' => random(32), 'title' => $_GPC['title'], 'show' => 1);
-                 include $this->template('goods/tpl/spec_item');*/
+                $specitem =[];
+                $good = $this->good->find($this->request->goodid)->toArray();
+                if(!$good){
+                    $good=[];
+                }
+                $spec = ['id' => $this->request->specid];
+                $specitem = ['id' => random(32), 'title' => '', 'show' =>1];
+                return view('admin.good.tpl.spec_item',compact('spec', 'specitem', 'good','specitem'));
                 break;
 
             case 'param':
@@ -364,9 +444,14 @@ class GoodController extends BaseController
     }
 
 
-    public function store()
+    public function store(GoodService $goodService,Request $request)
     {
-        dd($this->request->all());
+        $result = $goodService->createData($request);
+
+        return \redirect('web/good/'.$result.'/edit');
+
     }
+
+
 
 }
