@@ -23,11 +23,10 @@ class Address extends BaseModel
         foreach($address as $key => $val){
             $addresses[$val['Add_Code']][]=$val;
         }
-        //dd($addresses);
     }
 
 
-    public function getNmae($id)
+    public static function getName($id)
     {
         return self::find($id, ['Add_Name'])->toArray();
     }

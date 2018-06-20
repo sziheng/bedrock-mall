@@ -3,8 +3,8 @@
     <style>
         td{vertical-align:middle}
         .table>thead>tr>td{vertical-align:middle}
-        .goodul{list-style:none;float:right;text-align: right:width:80%;padding-right:20px}
-        .goodul li{float:left;width:70px};
+        .goodul{list-style:none;float:right;text-align: right; width:80%;padding-right:20px}
+        .goodul li{float:left;width:70px}
     </style>
     <script src="/layer.js"></script>
 
