@@ -203,7 +203,7 @@
         }*/
 
         $("#add-spec").html("正在处理...").attr("disabled", "true").toggleClass("btn-primary");
-        var url = "/good/addParams?tpl=spec";
+        var url = "/web/good/addParams?tpl=spec";
         $.ajax({
             "url": url,
             success:function(data){
@@ -223,7 +223,7 @@
     }
     function addSpecItem(specid){
         $("#add-specitem-" + specid).html("正在处理...").attr("disabled", "true");
-        var url = '/good/addParams?tpl=specitem&specid='+specid+'&goodid=' + '{{$good['id']}}';
+        var url = '/web/good/addParams?tpl=specitem&specid='+specid+'&goodid=' + '{{$good['id']}}';
         $.ajax({
             "url": url,
             success:function(data){

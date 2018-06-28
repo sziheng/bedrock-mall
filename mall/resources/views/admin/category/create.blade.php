@@ -19,17 +19,18 @@
                         </div>
                         <div class="x_content">
 
-                            <form class="form-horizontal form-label-left" novalidate action="/category"  method="POST" enctype="multipart/form-data">
+                            <form class="form-horizontal form-label-left" novalidate action="/web/category"  method="POST" enctype="multipart/form-data">
                                 {{ csrf_field() }}
+                                <input type="hidden" name="id">
                                 <span class="section">分类信息</span>
 
-                                <div class="item form-group">
+                           {{--     <div class="item form-group">
                                     <label class="control-label col-md-3 col-sm-3 col-xs-12" for="name">分类链接(点击复制)
                                     </label>
                                     <div class="col-md-6 col-sm-6 col-xs-12">
                                         <a href="" class="form-controlcol-md-7 col-xs-12">https:www.baidu.com</a>
                                     </div>
-                                </div>
+                                </div>--}}
                                 <div class="item form-group">
                                     <label class="control-label col-md-3 col-sm-3 col-xs-12" for="name">排序
                                     </label>

@@ -70,8 +70,9 @@
 
 <script src="/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
 
-<script src="https://cdn.bootcss.com/select2/4.0.6-rc.1/js/select2.min.js"></script>
-<link href="https://cdn.bootcss.com/select2/4.0.6-rc.1/css/select2.css" rel="stylesheet">
+<link href="/js/select2.min.css" rel="stylesheet">
+<script src="/js/select2.min.js"></script>
+
 <script src="/upload/util.js"></script>
 
 <!-- FastClick -->
@@ -112,14 +113,7 @@
 <script src="/js/require.config.js"></script>
 <script src="/ueditor/ueditor.config.js"></script>
 <script src="/ueditor/ueditor.all.js"></script>
-<script src="/admin.js"></script>
 
 //弹窗
 <script src="/layer.js"></script>
-
-
-<script src="/js/require.js"></script>
-<script src="/ueditor/ueditor.config.js"></script>
-<script src="/ueditor/ueditor.all.js"></script>
-<script src="/admin.js"></script>
 

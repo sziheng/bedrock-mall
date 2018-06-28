@@ -1,34 +1,5 @@
-$.ajaxSetup({
-    headers: {
-        'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content')
-    }
-})
 //商品分类显示/隐藏事件
 $(function(){
-    $('.ishome').click(function(){
-        var t = $(this);
-        var id = $(this).data('id');
-        if (t.html() == '隐藏') {
-            ishome = 1;
-        } else {
-            ishome = 0
-        }
-        $.post("/web/category/"+id+"/ishome",{ishome:ishome},function(result){
-            if (result.error){
-                alert(result.msg)
-            }else{
-                if(ishome == 1){
-                    t.attr('class','btn ishome btn-info  btn-xs');
-                    t.html('显示')
-                } else {
-                    t.attr('class','btn ishome btn-default  btn-xs')
-                    t.html('隐藏')
-                }
-
-            }
-        });
-    })
-
 
     //加载显示数据
     //1.加载省份
@@ -41,10 +12,18 @@ $(function(){
 
     //当省份选中变化，重新加载市和区
     $("#sheng").change(function(){ //当元素的值发生改变时，会发生 change 事件,该事件仅适用于文本域（text field），以及 textarea 和 select 元素。
-        //加载市
-        FillShi();
-        //加载区
-        FillQu();
+        if($(this).val()== 0){
+            var cityhtml = ' <option value="" selected="true">请选择</option>';
+            $("#shi").html(cityhtml);
+            var areahtml = ' <option value="" selected="true">请选择</option>';
+            $("#qu").html(areahtml);
+        }else{
+            //加载市
+            FillShi();
+            //加载区
+            FillQu();
+        }
+
 
     });
 

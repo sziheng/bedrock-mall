@@ -28,13 +28,13 @@ Route::group(['namespace' => 'Web'],function () {
     Route::post('/web/category', 'CategoryController@store');
 
     //删除分类
-    Route::get('/web/category/{category}/delete', 'CategoryController@delete');
+    Route::post('/web/category/{category}/delete', 'CategoryController@delete');
 
     //编辑分类
     Route::get('/web/category/{category}/edit', 'CategoryController@edit');
 
     //编辑分类操作
-    Route::put('/web/category/{category}', 'CategoryController@update');
+    Route::put('/web/category/', 'CategoryController@update');
 
     //分类显示/隐藏
     Route::post('/web/category/{category}/ishome', 'CategoryController@ishome');
@@ -72,16 +72,48 @@ Route::group(['namespace' => 'Web'],function () {
     //会员概述
     Route::get('/web/member', 'MemberController@index');
 
-
     //会员概述页信息
     Route::get('/web/member/getMemberInfos', 'MemberController@getMemberInfos');
 
     //会员列表
     Route::get('/web/member/getList', 'MemberController@getList');
 
+    //会员黑白名单操作
+    Route::post('/web/member/changeBlack', 'MemberController@changeBlack');
+
+    //会员删除
+    Route::post('/web/member/delete', 'MemberController@delete');
+
+    //会员详情
+    Route::get('/web/member/{member}', 'MemberController@detail');
+
+    //彩虹卡活动列表
+    Route::get('/web/rainbowCard/getActivityList', 'RainbowCardController@getActivityList');
+
+    Route::post('/web/rainbowCard/changeIsdisable', 'RainbowCardController@changeIsdisable');
+
+    //活动新增
+    Route::get('/web/rainbowCard/create', 'RainbowCardController@create');
+
+    //活动存储
+    Route::post('/web/rainbowCard/activityStore', 'RainbowCardController@activityStore');
+
+    //活动修改
+    Route::get('/web/rainbowCard/activity/{activity}', 'RainbowCardController@create');
+
+    //彩虹卡列表
+    Route::get('/web/rainbowCard/getCardList', 'RainbowCardController@getCardList');
+
+    //彩虹卡号的开启与关闭
+
+    Route::post('/web/rainbowCard/changeDidable', 'RainbowCardController@changeDidable');
+
+
+
+
 });
 //图片上传
-Route::post('/uploadImage', 'UploadController@upload');
+Route::post('/uploadImage', '\Bedrock\Http\Controllers\Web\UploadController@upload');
 
 /**********************订单概述*********************/
 Route::get('/order/ajaxgettotals', '\Bedrock\Http\Controllers\Web\Order\SummaryController@ajaxgettotals');

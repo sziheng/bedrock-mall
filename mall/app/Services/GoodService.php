@@ -11,6 +11,7 @@ use Bedrock\Models\Param;
 use Bedrock\Models\SpecItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use \Exception;
 
 /**
  * Class UserService
@@ -123,8 +124,8 @@ class GoodService
             $goodinfo->isshow = $request->isshow;
             $goodinfo->goodssn = $request->goodssn;
             $goodinfo->productsn = $request->productsn;
-            $goodinfo->weight = $request->weight;
-            $goodinfo->total = $request->total;
+            $goodinfo->weight = $request->weight ? $request->weight:0;
+            $goodinfo->total = $request->total ? $request->total:1;
             $goodinfo->totalcnf = $request->totalcnf;
             $goodinfo->hasoption = $request->hasoption;
 
@@ -154,13 +155,16 @@ class GoodService
             $goodinfo->share_title = $request->share_title;
             $goodinfo->share_icon = $request->share_icon;
             $goodinfo->description = $request->description;
+            $goodinfo->content = $request->detailcontent;
+            $goodinfo->buycontent = $request->buycontent;
+            $goodinfo->buyshow = ($request->buyshow=='on') ? 1 : 0;
             $goodinfo->save();
             $request->id = $goodinfo->id;
             $this->createSpec($request);
             $this->createOption($request);
             $this->createParam($request);
         }catch (Exception $e){
-            var_dump($e);
+            return false;
         }
 
         return $goodinfo->id;

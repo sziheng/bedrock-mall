@@ -3,7 +3,10 @@
 namespace Bedrock\Http\Controllers\Web;
 
 use Bedrock\Http\Controllers\Controller;
+use \Exception;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Database\Eloquent\Builder;
+
 /**
  * Class BaseController
  *

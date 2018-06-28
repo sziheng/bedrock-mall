@@ -1,3 +1,8 @@
+$.ajaxSetup({
+    headers: {
+        'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content')
+    }
+})
 $(function(){
     $('.layer').click(function(){
         var content = $(this).data('content');

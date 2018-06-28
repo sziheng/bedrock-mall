@@ -1,5 +1,6 @@
 @extends('admin.layout.main')
 @section('content')
+    <script src="/admin.js"></script>
     <link href="/resource/datetimepicker/jquery.datetimepicker.css" rel="stylesheet">
     <script src="/resource/datetimepicker/jquery.datetimepicker.js"></script>
     <script src="/fileupload/js/vendor/jquery.ui.widget.js"></script>

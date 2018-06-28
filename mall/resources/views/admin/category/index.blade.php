@@ -18,8 +18,8 @@
                                     <thead>
                                     <tr class="headings">
 
-                                        <th class="column-title">id </th>
-                                        <th class="column-title">名称 </th>
+                                        <th class="column-title" style="width:15%">id </th>
+                                        <th class="column-title" style="width:60%">名称 </th>
                                         <th class="column-title no-link last"><span class="nobr">操作</span>
                                         </th>
                                     </tr>
@@ -31,9 +31,15 @@
                                             <td class=" ">{{$category->id}}</td>
                                             <td class=" ">{{$category->name}}</td>
                                             <td class=" last">
-                                                <button data-id="{{$category->id}}" type="button" class="btn ishome @if($category->ishome)btn-info @else btn-default @endif btn-xs" @if($category->ishome) data-ishome="0" @else data-ishome="1" @endif>@if($category->ishome)显示@else隐藏@endif</button>
-                                                <a href="/web/category/{{$category->id}}/edit"><i class="glyphicon glyphicon-edit"></i></a>
-                                                <a href="/web/category/{{$category->id}}/delete"><i class="glyphicon glyphicon-trash"></i></a>
+                                                <button data-id="{{$category->id}}" type="button" class="btn  btn-sm  ishome @if($category->ishome)btn-info @else btn-default @endif " @if($category->ishome) data-ishome="0" @else data-ishome="1" @endif>@if($category->ishome)显示@else隐藏@endif</button>
+                                                <a  class='btn btn-default btn-sm' href="/web/category/{{$category->id}}/edit" ><i class='fa fa-edit'></i> 编辑</a>
+                                                <a  class = "btn btn-default btn-sm layer"
+                                                    data-content = "确认要删除该分类吗？"
+                                                    data-url = "/web/category/{{$category->id}}/delete"
+                                                    data-params = "1"
+                                                    data-type ="one"
+                                                    data-id = "{{$category->id}}">
+                                                    <i class='fa fa-remove'></i> 删除</a>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -47,4 +53,29 @@
             </div>
         </div>
     </div>
+    <script>
+        $('.ishome').click(function(){
+            var t = $(this);
+            var id = $(this).data('id');
+            if (t.html() == '隐藏') {
+                ishome = 1;
+            } else {
+                ishome = 0
+            }
+            $.post("/web/category/"+id+"/ishome",{ishome:ishome},function(result){
+                if (result.error){
+                    alert(result.msg)
+                }else{
+                    if(ishome == 1){
+                        t.attr('class','btn ishome btn-info  btn-sm');
+                        t.html('显示')
+                    } else {
+                        t.attr('class','btn ishome btn-default  btn-sm')
+                        t.html('隐藏')
+                    }
+
+                }
+            });
+        })
+    </script>
 @endsection

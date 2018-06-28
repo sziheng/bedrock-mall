@@ -6,7 +6,9 @@ $(function(){
             'util' : ['jquery'],
             'fileUploader' : ['jquery'],
             'bootstrap' : ['jquery'],
-            'echarts' : ['jquery']
+            'echarts' : ['jquery'],
+            'datetimepicker' : ['jquery'],
+            'select2'  : ['jquery']
         },
         paths : {
             'jquery' : '/vendors/jquery/dist/jquery.min',
@@ -15,7 +17,9 @@ $(function(){
             'bootstrap' : '/vendors/bootstrap/dist/js/bootstrap.min',
             'util' : '/upload/util',
             'fileUploader' : '/upload/fileUploader',
-            'echarts'  : '/echarts/echarts-all'
+            'echarts'  : '/echarts/echarts-all',
+            'datetimepicker' : '/resource/datetimepicker/jquery.datetimepicker',
+            'select2' : '/js/select2.min',
         }
     });
 })

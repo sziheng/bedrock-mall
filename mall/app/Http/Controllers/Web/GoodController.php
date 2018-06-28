@@ -76,9 +76,6 @@ class GoodController extends BaseController
      */
     public function index(Request $request, Category $category)
     {
-        //todo 建议所有从 $request 对象中获取参数统一化，
-        //todo 不要在控制器中书写 SQL ，该方法太长了，所有方法一律不得超过 50 行
-        //todo 这么复杂的逻辑难道不应该放入 Services 中吗？
         $condition = $request->status;
         $cate = intval($request->cate);
         $keyword = trim($request->keyword);
@@ -242,13 +239,9 @@ class GoodController extends BaseController
     /**
      * Create by szh
      * 商品删除
-     * TODO 删除商品之前难道在逻辑上不去判断下，商品是否存在，如果不存在，应该提示下用户的
      */
     public function delete()
     {
-        if(!$this->good->find($this->request->id)){
-            $this->error('该商品不存在');
-        }
         if ($this->request->id){
             if (!is_array($this->request->id)) {
                 $id = array($this->request->id);
@@ -367,7 +360,7 @@ class GoodController extends BaseController
     }
 
     /**
-     * 新增修改公用数据
+     * 新增/修改 商品公用数据
      * Create by szh
      */
     public function rendorData($good)
@@ -425,10 +418,8 @@ class GoodController extends BaseController
 
             case 'specitem':
                 $specitem =[];
-                $good = $this->good->find($this->request->goodid)->toArray();
-                if(!$good){
-                    $good=[];
-                }
+                $good = $this->good->find($this->request->goodid);
+                $good = $good ? $good->toArray():[];
                 $spec = ['id' => $this->request->specid];
                 $specitem = ['id' => random(32), 'title' => '', 'show' =>1];
                 return view('admin.good.tpl.spec_item',compact('spec', 'specitem', 'good','specitem'));
@@ -447,11 +438,15 @@ class GoodController extends BaseController
     public function store(GoodService $goodService,Request $request)
     {
         $result = $goodService->createData($request);
-
-        return \redirect('web/good/'.$result.'/edit');
+        if( $result ){
+            return \redirect('web/good/'.$result.'/edit')->with('success','操作成功');
+        }else{
+            return back()->with('error', '操作失败');
+        }
 
     }
 
 
 
 }
+

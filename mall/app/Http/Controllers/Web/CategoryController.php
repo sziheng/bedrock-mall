@@ -12,16 +12,22 @@ use Illuminate\Http\Request;
 
 class CategoryController extends BaseController
 {
+
+    protected $category;
+
+    public function __construct(Category $category)
+    {
+        $this->category = $category;
+        parent::__construct();
+    }
+
     /**
-     * todo 方法注释信息不全
-     * TODO 建议所有控制器里对外暴露的方法统一加上 get 或者 post 作为前缀
      * Create by szh
      * 分类列表
      */
     public function index()
     {
-        //todo 一些查询条件没有加入，uniacid，enabled
-        $categorys=Category::paginate(10);
+        $categorys=Category::where('uniacid', UNIACID)->where('level',1)->orderBy('displayorder','desc')->paginate(10);
 
         return view('admin.category.index', compact('categorys'));
     }
@@ -41,26 +47,15 @@ class CategoryController extends BaseController
      */
     public function store(Request $request)
     {
-        //todo 该方法实现很不优雅
         $this->validate(request(), [
             'name' => 'required|max:255|min:1',
         ]);
-        $params = array_merge(request(['title', 'content']));
-
-        $params = request(['displayorder', 'name', 'description', 'advurl', 'ishome']);
-        if ($params['ishome'] == 'on') {
-            $params['ishome'] = '1';
+        $result =$this->createData($request);
+        if ($result) {
+            return redirect("/web/category")->with('succescc','操作成功');
         } else {
-            $params['ishome'] = '0';
+            return back()->with('error', $result['失败']);
         }
-        //图片上传
-        if ($request->file('thumb')){
-            $path = $request->file("thumb")->storePublicly(date('Y-m-d',time()));
-            $params['thumb'] = '/storage/'. $path;
-            $params['advimg'] = '/storage/'. $path;
-        }
-        $post = Category::create($params);
-        return redirect('/category');
     }
 
     /**
@@ -71,9 +66,12 @@ class CategoryController extends BaseController
      */
     public function delete(Category $category)
     {
-        $category->delete();
-
-        return redirect('/category');
+        try{
+            $result = $category->delete();
+            return $result ? ['error' => 0] : ['error' => 1, 'msg' => '失败',];
+        } catch (Exception $e){
+            return  ['error' => 1, 'msg' => '失败',];
+        }
     }
 
     /**
@@ -83,6 +81,9 @@ class CategoryController extends BaseController
      */
     public function edit(Category $category)
     {
+        if (!isset($category)) {
+            $category = $this->category;
+        }
         return view('admin.category.edit', compact('category'));
     }
 
@@ -92,30 +93,46 @@ class CategoryController extends BaseController
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      * todo
      */
-    public function update(Category $category, Request $request)
+    public function update(Request $request)
     {
         //验证
         $this->validate(request(), [
             'name' => 'required|max:255|min:1',
         ]);
-        $category->displayorder = request('displayorder');
-        $category->name = request('name');
-        $category->advurl = request('advurl');
-
-        if (request('ishome') == 'on') {
-            $category->ishome = 1;
+        $result =$this->createData($request);
+        if ($result) {
+            return redirect("/web/category")->with('succescc','操作成功');
         } else {
-            $category->ishome = 0;
+            return back()->with('error', $result['失败']);
         }
-        //图片上传
-        if ($request->file('thumb')){
-            $path = $request->file("thumb")->storePublicly(date('Y-m-d',time()));
-            $category->thumb = '/storage/'. $path;
-            $category->advimg = '/storage/'. $path;
+    }
+
+    public function createData($request)
+    {
+        try{
+            $categoryInfo = $this->category->find($request->id);
+            if (!$categoryInfo) {
+                $categoryInfo = $this->category;
+            }
+            $categoryInfo->displayorder = $request->displayorder;
+            $categoryInfo->name = $request->name;
+            $categoryInfo->description = $request->description;
+            $categoryInfo->ishome = ($request->ishome == 'on') ? 1 : 0;
+            $categoryInfo->advurl = $request->advurl;
+            $categoryInfo->uniacid = UNIACID;
+            $categoryInfo->level = 1;
+            //图片上传
+            if ($request->file('thumb')){
+                $path = $request->file("thumb")->storePublicly(date('Y-m-d',time()));
+                $categoryInfo->thumb = '/storage/'. $path;
+                $categoryInfo->advimg = '/storage/'. $path;
+            }
+            $categoryInfo->save();
+            return $categoryInfo->id ? true: false;
+        } catch (Exception $e){
+            return false;
         }
-        $category->save();
-        //渲染 todo 无意义的注释，建议去掉
-        return redirect("/category");
+
     }
 
     /**
@@ -123,7 +140,6 @@ class CategoryController extends BaseController
      * @param Category $category
      * @param Request  $request
      * @return array
-     * todo 该方法名不够达意，建议更换，不要延续之前表的命名规范，那是个坑
      */
     public function ishome(Category $category, Request $request)
     {

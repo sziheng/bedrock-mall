@@ -1,5 +1,6 @@
 @extends('admin.layout.main')
 @section('content')
+    <script src="/admin.js"></script>
     <style>
         td{vertical-align:middle}
         .table>thead>tr>td{vertical-align:middle}
@@ -67,13 +68,14 @@
                                         <select id="sheng" name='province'  class="input-sm form-control" style='width:90px;display: inline-block' >
 
                                             @if($request->province)
+                                                <option value="0" selected="true">省/直辖市</option>
                                                 <option value="{{array_get($provinces[0],'Add_Code','')}}" selected="true">{{array_get($provinces[0],'Add_Name', '')}}</option>
                                             @else
-                                                <option value="" selected="true">省/直辖市</option>
+                                                <option value="0" selected="true">省/直辖市</option>
                                             @endif
                                         </select>
                                         <select id="shi" name='city'   class="input-sm form-control" style='width:90px;display: inline-block' >
-                                            @if($request->city)
+                                            @if($request->city && is_array($citys))
                                                 @foreach($citys as $city)
                                                     <option value="{{array_get($city,'Add_Code', '')}}" @if(array_get($city,'Add_Code',0) == array_get($provinces[1],'Add_Code',-1))selected="true" @endif>{{array_get($city,'Add_Name','')}}</option>
                                                 @endforeach
@@ -83,7 +85,7 @@
 
                                         </select>
                                         <select id="qu" name='area'  class="input-sm form-control" style='width:90px;display: inline-block;margin-right: 3px;' >
-                                            @if($request->area)
+                                            @if($request->area && is_array($areas))
                                                 @foreach($areas as $area)
                                                     <option value="{{array_get($area,'Add_Code','')}}" @if(array_get($area,'Add_Code',0) == array_get($provinces[2],'Add_Code',-1)) selected="true" @endif>{{array_get($area,'Add_Name','')}}</option>
                                                 @endforeach

@@ -4,7 +4,7 @@ namespace Bedrock\Http\Controllers\Web;
 
 use Bedrock\Models\MemberLevel;
 use Bedrock\Models\Member;
-
+use Bedrock\Models\Order;
 use Bedrock\Services\MemberService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
@@ -18,6 +18,7 @@ class MemberController extends BaseController
 
     protected $memberLevel;
     protected $request;
+    protected $order;
 
 
     /**
@@ -33,12 +34,14 @@ class MemberController extends BaseController
         MemberLevel $memberLevel,
         Member  $member,
         Request $request,
-        MemberService $memberService
+        MemberService $memberService,
+        Order   $order
     ){
         $this->memberLevel     = $memberLevel;
         $this->member          = $member;
         $this->request         = $request;
         $this->memberService   = $memberService;
+        $this->order           = $order;
         parent::__construct();
     }
 
@@ -54,7 +57,7 @@ class MemberController extends BaseController
     public function getList(Request $request)
     {
         $members = $this->memberService->getList($request);
-        return view('admin.member.list', compact('members'));
+        return view('admin.member.list', compact('members', 'request'));
     }
 
     /**
@@ -159,6 +162,42 @@ class MemberController extends BaseController
         $appendMember = $appendMember[0]['count'];
         $proportion = isset($memberCount) ? intval(number_format(round($appendMember / $memberCount, 3) * 100)) : 0;
         return ['count' => intval($appendMember), 'rate' => isset($memberCount) ? $proportion : 0];
+    }
+
+
+    public function changeBlack()
+    {
+        if ($this->request->id){
+            $id = is_array($this->request->id) ? $this->request->id : [$this->request->id];
+            $result = $this->member->whereIn('id', $id)->update(['isblack'=>$this->request->params]);
+            return $result ? ['error' => 0] : ['error' => 1, 'msg' => '失败',];
+        } else {
+            return ['error' => 1, 'msg' => 'id不存在',];
+        }
+    }
+
+    /**
+     * Create by szh
+     * 会员彻底删除
+     */
+    public function delete()
+    {
+        if ($this->request->id){
+            if (!is_array($this->request->id)) {
+                $id = array($this->request->id);
+            } else {
+                $id = $this->request->id;
+            }
+            $result = $this->member->whereIn('id', $id)->delete();
+            return $result ? ['error' => 0] : ['error' => 1, 'msg' => '失败',];
+        } else {
+            return ['error' => 1, 'msg' => 'id不存在',];
+        }
+    }
+
+    public function detail(Member $member)
+    {
+        return view('admin.member.detail', compact('member'));
     }
 
 

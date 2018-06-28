@@ -13,7 +13,7 @@ class VerifyCsrfToken extends Middleware
      * @var array
      */
     protected $except = [
-        'good/chooseAddress'
+        'web/good/chooseAddress'
     ];
     public function handle($request, Closure $next)
     {
