@@ -340,9 +340,9 @@ class GoodController extends BaseController
         {
             $good['piclist'] = array_merge([$good['thumb']],iunserializer($good['thumb_url']));
         }
-        $good['province'] = $this->address->getNmae($good['sheng']) ? $this->address->getNmae($good['sheng'])->toArray() : '';
-        $good['city'] = $this->address->getNmae($good['shi']) ? $this->address->getNmae($good['shi'])->toArray() : '';
-        $good['area'] = $this->address->getNmae($good['qu']) ?$this->address->getNmae($good['qu'])->toArray() :'';
+        $good['province'] = $this->address->getName($good['sheng']) ? $this->address->getName($good['sheng'])->toArray() : '';
+        $good['city'] = $this->address->getName($good['shi']) ? $this->address->getName($good['shi'])->toArray() : '';
+        $good['area'] = $this->address->getName($good['qu']) ?$this->address->getName($good['qu'])->toArray() :'';
 
         $data = $this->rendorData($good);
         $categorys = $data['categorys'];

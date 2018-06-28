@@ -33,7 +33,7 @@
                     <li><a><i class="fa fa-edit"></i> 订单模块 <span class="fa fa-chevron-down"></span></a>
                         <ul class="nav child_menu">
                             <li><a href="/order/summary">订单概述</a></li>
-                            <li><a href="/order/list'">全部订单</a></li>
+                            <li><a href="/order/list">全部订单</a></li>
                             <li><a href="/order/staydelivery">待发货</a></li>
                             <li><a href="/order/staytakedelivery">待收货</a></li>
                             <li><a href="/order/staypayment">待付款</a></li>

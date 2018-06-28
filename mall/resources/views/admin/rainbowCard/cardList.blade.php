@@ -39,7 +39,7 @@
 
                                         <div class="input-group" style="width:300px;display:inline-block;">
 
-                                            <input style="width:200px;display:inline-block;margin-top:-3px" type="text" class="input-sm form-control" name='keyword' value="{{$request->cardNo}}" placeholder="彩虹卡卡号" style="width:200px"> <span class="input-group-btn" style="width:50px;display:inline-block;margin-top:-3px">
+                                            <input style="width:200px;display:inline-block;margin-top:-3px" type="text" class="input-sm form-control" name='keyword' value="{{$request->keyword}}" placeholder="彩虹卡卡号" style="width:200px"> <span class="input-group-btn" style="width:50px;display:inline-block;margin-top:-3px">
 
                                                 <button class="btn btn-sm btn-primary" type="submit" > 搜索</button> </span>
                                         </div>

@@ -43,8 +43,8 @@
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label must">起止日期</label>
                                     <div class="col-sm-7"  style="padding-right:0;" >
-                                        <input name="starttime" id="beginTimeStore" type="hidden" value="{{date('Y-m-d ',object_get($activity, 'starttime', ''))}}">
-                                        <input name="endtime" id="endTimeStore" type="hidden" value="{{date('Y-m-d ',object_get($activity, 'endtime', ''))}}">
+                                        <input name="starttime" id="beginTimeStore" type="hidden" value="{{date('Y-m-d ',object_get($activity, 'starttime', 0))}}">
+                                        <input name="endtime" id="endTimeStore" type="hidden" value="{{date('Y-m-d ',object_get($activity, 'endtime', 0))}}">
                                         <button type="button" class="btn btn-default btn-sm" id="daterange-btn" style="width:200px;display:inline-block;margin-bottom:0px;margin-top: -3px">
                                             <i class="fa fa-calendar"></i>
                                             <span class="timedata">起止时间</span>

@@ -86,15 +86,15 @@ class ActivityService
                     });
             }
         }
-        $sql = $sql->when($request->cardNo, function($query) use ($request){
-            $query->where('ims_weshop_activity_sn.ticketsn', 'like', '%' . $request->cardNo . '%');
+        $sql = $sql->when($request->keyword, function($query) use ($request){
+            $query->where('ims_weshop_activity_sn.ticketsn', 'like', '%' . $request->keyword . '%');
         });
 
         $cardList = $sql->paginate(10);
         $page = isset($page)?$request['page']: 1;
         $appendData = $cardList->appends(array(
             'starttime' => $request->cardId,
-            'endtime' => $request->cardNo,
+            'endtime' => $request->keyword,
             'keyword' => $request->status
         ));
         $order = 1+ (($page)-1) * 10;
@@ -126,6 +126,7 @@ class ActivityService
             $activityInfo = $this->activity->find($request->id);
             $error = [];
             if (!$activityInfo) {
+                $oldTotal = 0;
                 $activityInfo = $this->activity;
                 $request->validate($this->storerole);
             } else {
