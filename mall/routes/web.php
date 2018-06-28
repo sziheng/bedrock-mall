@@ -160,10 +160,10 @@ Route::get('/order/orderdetail', '\Bedrock\Http\Controllers\Web\OrderController@
 /***供应商模块***/
 
 Route::group(['namespace' => 'web', 'prefix' => 'web/merch_user'],function () {
-    Route::get('/', 'MerchUserController@getIndex');
-    Route::get('/add', 'MerchUserController@getCreate');
-    Route::post('/add', 'MerchUserController@postCreate');
-    Route::get('/{id}/edit', 'MerchUserController@getEdit');
-    Route::post('/{id}/edit', 'MerchUserController@postEdit');
-    Route::post('/{id}/delete', 'MerchUserController@postDelete');
+    Route::get('/', 'MerchUserController@getIndex')->name('webMerchUserIndex');
+    Route::get('/add', 'MerchUserController@getCreate')->name('webMerchUserGetCreate');
+    Route::post('/add', 'MerchUserController@postCreate')->name('webMerchUserPostCreate');
+    Route::get('/{id}/edit', 'MerchUserController@getEdit')->name('webMerchUserGetEdit');
+    Route::post('/{id}/edit', 'MerchUserController@postEdit')->name('webMerchUserPostEdit');
+    Route::post('/{id}/delete', 'MerchUserController@postDelete')->name('webMerchUserDelete');
 });

@@ -22,11 +22,14 @@ class Address extends BaseModel
     public function expressAddress()
     {
         $address= self::where('Add_Level', '<=', '2' )->get()->toArray();
+        foreach($address as $key => $val){
+            $addresses[$val['Add_Code']][]=$val;
+        }
         return $this->getTree($address, 0);
     }
 
 
-    public function getNmae($id)
+    public static function getName($id)
     {
         return self::find($id, ['Add_Name']);
     }
