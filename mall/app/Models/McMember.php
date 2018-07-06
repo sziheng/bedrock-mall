@@ -3,7 +3,7 @@
 namespace Bedrock\Models;
 
 
-class Mcmember extends BaseModel
+class McMember extends BaseModel
 {
     protected $table = 'ims_mc_members';
 

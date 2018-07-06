@@ -159,7 +159,7 @@ Route::get('/order/orderdetail', '\Bedrock\Http\Controllers\Web\OrderController@
 
 /***供应商模块***/
 
-Route::group(['namespace' => 'web', 'prefix' => 'web/merch_user'],function () {
+Route::group(['namespace' => 'Web', 'prefix' => 'web/merch_user'],function () {
     Route::get('/', 'MerchUserController@getIndex')->name('webMerchUserIndex');
     Route::get('/add', 'MerchUserController@getCreate')->name('webMerchUserGetCreate');
     Route::post('/add', 'MerchUserController@postCreate')->name('webMerchUserPostCreate');

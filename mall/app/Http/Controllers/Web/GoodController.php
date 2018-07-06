@@ -338,7 +338,7 @@ class GoodController extends BaseController
         $good['discounts'] = json_decode($good['discounts'], true);
         if ($good['thumb'])
         {
-            $good['piclist'] = array_merge([$good['thumb']],iunserializer($good['thumb_url']));
+            $good['piclist'] = array_merge([$good['thumb']],$this->iunserializer($good['thumb_url']));
         }
         $good['province'] = $this->address->getName($good['sheng']) ? $this->address->getName($good['sheng'])->toArray() : '';
         $good['city'] = $this->address->getName($good['shi']) ? $this->address->getName($good['shi'])->toArray() : '';
@@ -358,6 +358,8 @@ class GoodController extends BaseController
         $html = $goodService->combinationHtml($options, $levels, $commissionLevels, $good, $specs);
         return view('admin.good.create', compact('good','categorys', 'levels', 'areas', 'virtualTypes', 'dispatchs', 'companyies', 'params', 'specs', 'commissionLevels' ,'shopset_level','html', 'address'));
     }
+
+
 
     /**
      * 新增/修改 商品公用数据
@@ -444,6 +446,72 @@ class GoodController extends BaseController
             return back()->with('error', '操作失败');
         }
 
+    }
+
+    public function iunserializer($value) {
+        if (empty($value)) {
+            return '';
+        }
+        if (!$this->is_serialized($value)) {
+            return $value;
+        }
+        $result = unserialize($value);
+        if ($result === false) {
+            $temp = preg_replace('!s:(\d+):"(.*?)";!se', "'s:'.strlen('$2').':\"$2\";'", $value);
+            return unserialize($temp);
+        }
+        return $result;
+    }
+
+    public function is_serialized($data, $strict = true) {
+        if (!is_string($data)) {
+            return false;
+        }
+        $data = trim($data);
+        if ('N;' == $data) {
+            return true;
+        }
+        if (strlen($data) < 4) {
+            return false;
+        }
+        if (':' !== $data[1]) {
+            return false;
+        }
+        if ($strict) {
+            $lastc = substr($data, -1);
+            if (';' !== $lastc && '}' !== $lastc) {
+                return false;
+            }
+        } else {
+            $semicolon = strpos($data, ';');
+            $brace = strpos($data, '}');
+            if (false === $semicolon && false === $brace)
+                return false;
+            if (false !== $semicolon && $semicolon < 3)
+                return false;
+            if (false !== $brace && $brace < 4)
+                return false;
+        }
+        $token = $data[0];
+        switch ($token) {
+            case 's' :
+                if ($strict) {
+                    if ('"' !== substr($data, -2, 1)) {
+                        return false;
+                    }
+                } elseif (false === strpos($data, '"')) {
+                    return false;
+                }
+            case 'a' :
+            case 'O' :
+                return (bool)preg_match("/^{$token}:[0-9]+:/s", $data);
+            case 'b' :
+            case 'i' :
+            case 'd' :
+                $end = $strict ? '$' : '';
+                return (bool)preg_match("/^{$token}:[0-9.E-]+;$end/", $data);
+        }
+        return false;
     }
 
 

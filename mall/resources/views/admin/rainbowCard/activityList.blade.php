@@ -59,13 +59,13 @@
                                                        >
                                                     @if($activity->isdisable==0)关闭 @else 开启@endif</span>
                                                     <a  class='btn btn-default btn-sm' href="/web/rainbowCard/activity/{{$activity->id}}" ><i class='fa fa-edit'></i> 编辑</a>
-                                                    <a  class = "btn btn-default btn-sm layer"
+                                                   {{-- <a  class = "btn btn-default btn-sm layer"
                                                         data-content = "确认要删除该活动吗？"
                                                         data-url = "/web/member/delete"
                                                         data-params = "1"
                                                         data-type ="one"
                                                         data-id = "{{$activity->id}}">
-                                                        <i class='fa fa-remove'></i> 删除</a>
+                                                        <i class='fa fa-remove'></i> 删除</a>--}}
                                                 </td>
 
                                             </tr>

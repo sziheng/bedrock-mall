@@ -49,7 +49,7 @@ class RainbowCardController extends BaseController
 
     public function create(Activity $activity)
     {
-        if ($activity->createtime > time()){
+        if ($activity->starttime < time()){
             $activity->overtime = '1';
         }
         $goodsContent = json_decode($activity->content,true);
