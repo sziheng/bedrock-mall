@@ -24,8 +24,6 @@
     <link href="/vendors/iCheck/skins/flat/green.css" rel="stylesheet">
     <!-- Custom Theme Style -->
     <link href="/build/css/custom.min.css" rel="stylesheet">
-    <!-- Bootstrap-fileinput -->
-    <link href="/bootstrap-fileinput/css/fileinput.min.css" rel="stylesheet">
     <!--fileupload-->
     <link rel="stylesheet" href="http://blueimp.github.io/Gallery/css/blueimp-gallery.min.css">
     <!-- CSS to style the file input field as button and adjust the Bootstrap progress bars -->
